@@ -7,7 +7,7 @@ body {
   margin: 20px auto;
   padding: 20px;
   width: 90%;
-  max-width: 600px;
+  max-width: 700px;
   border: 2px solid #007bff;
   border-radius: 10px;
   background-color: #f8f9fa;
@@ -139,9 +139,9 @@ canvas { display: none; }
 }
 /* Posicionar botón de Modo Oscuro */
 #toggleDarkMode {
-  position: fixed;
-  top: 0; 
-  right: 20px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
   z-index: 999;
 }
 /* Modo Oscuro */
