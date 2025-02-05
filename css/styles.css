@@ -1,0 +1,274 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 20px;
+}
+.section {
+  margin: 20px auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+.section h2 {
+  margin-bottom: 20px;
+}
+#dropZone, #dropZonePdf, #editDropZone {
+  border: 2px dashed #007bff;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  cursor: pointer;
+  color: #6c757d;
+}
+.dragover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+#cancelExtract{
+  background-color: #dc3545; /* Rojo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#cancelExtract:hover {
+  background-color: #c82333; /* Rojo más oscuro al pasar el mouse */
+}
+.dark-mode #cancelExtract {
+    background-color: #ff4d4d; /* Rojo más brillante */
+}
+
+.dark-mode #cancelExtract:hover {
+    background-color: #ff1a1a; /* Rojo más fuerte */
+}
+#cancelPdf {
+  background-color: #dc3545; /* Rojo normal */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#cancelPdf:hover {
+  background-color: #c82333; /* Rojo más oscuro */
+}
+
+/* Cuando el modo oscuro está activado */
+.dark-mode #cancelPdf {
+  background-color: #ff4d4d; /* Rojo más brillante */
+}
+
+.dark-mode #cancelPdf:hover {
+  background-color: #ff1a1a; /* Rojo más fuerte */
+}
+#cancelEditSection {
+  background-color: #dc3545; /* Rojo normal */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#cancelEditSection:hover {
+  background-color: #c82333; /* Rojo más oscuro */
+}
+
+/* Cuando el modo oscuro está activado */
+.dark-mode #cancelEditSection {
+  background-color: #ff4d4d; /* Rojo más brillante */
+}
+
+.dark-mode #cancelEditSection:hover {
+  background-color: #ff1a1a; /* Rojo más fuerte */
+}
+#cancelEdit {
+  background-color: #dc3545; /* Rojo normal */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#cancelEdit:hover {
+  background-color: #c82333; /* Rojo más oscuro */
+}
+
+/* Cuando el modo oscuro está activado */
+.dark-mode #cancelEdit {
+  background-color: #ff4d4d; /* Rojo más brillante */
+}
+
+.dark-mode #cancelEdit:hover {
+  background-color: #ff1a1a; /* Rojo más fuerte */
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+canvas { display: none; }
+/* Barra de carga */
+#progressContainer {
+  display: none;
+  width: 100%;
+  max-width: 600px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  margin: 10px auto;
+}
+#progressBar {
+  width: 0%;
+  height: 20px;
+  background-color: #007bff;
+  border-radius: 10px;
+  transition: width 0.3s, background-color 0.3s;
+}
+/* Posicionar botón de Modo Oscuro */
+#toggleDarkMode {
+  position: fixed;
+  top: 0; 
+  right: 20px;
+  z-index: 999;
+}
+/* Modo Oscuro */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+.dark-mode .section {
+  background-color: #1e1e1e;
+  border-color: #bb86fc;
+}
+.dark-mode #dropZone, .dark-mode #dropZonePdf, .dark-mode #editDropZone {
+  border-color: #bb86fc;
+  color: #e0e0e0;
+}
+.dark-mode button {
+  background-color: #bb86fc;
+}
+.dark-mode button:hover {
+  background-color: #9a67ea;
+}
+.dark-mode #progressContainer {
+  background-color: #333;
+}
+.dark-mode #progressBar {
+  background-color: #bb86fc;
+}
+/* Modal para edición */
+/* #editorModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 2000;
+} */
+
+#editorModal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;} /* Fondo semi-transparente */
+ 
+#editorContent {
+  position: relative;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 10px;
+  border: 2px solid #007bff;
+}
+.dark-mode #editorContent {
+  color: white;
+  position: relative;
+  margin: 50px auto;
+  padding: 20px;
+  background: #282828;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 10px;
+  border: 2px solid #bb86fc;
+}
+
+.cropper-container {
+  max-width: 100% !important;
+  max-height: 80vh !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
+
+/* Ajusta la imagen dentro del Cropper */
+.cropper-img-container,
+.cropper-view-box {
+  max-width: 100% !important;
+  max-height: 80vh !important;
+}
+
+/* .cropper-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 80vh !important;
+  overflow: hidden !important;
+}
+
+.cropper-canvas,
+.cropper-view-box {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+.cropper-canvas img {
+  display: block !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+} */
+
+#editorImage {
+  max-width: 100%;
+  max-height: 400px;
+}
+/* Sección de edición sin conversión */
+#editPreviewContainer {
+  display: none;
+  margin: 10px auto;
+}
+#editPreview {
+  max-width: 100%;
+  display: none;
+}
+#editPdfCanvas {
+  display: none;
+  max-width: 100%;
+}

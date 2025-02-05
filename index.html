@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="./img/logo.png">
+  <title>Convertidor PDF</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <!-- jsPDF y pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+  <!-- JSZip para generar ZIP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+  <!-- Cropper.js (para recortar y editar) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+</head>
+<body>
+  <h1>Convertir y Extraer Imágenes de PDF</h1>
+  <button id="toggleDarkMode">Modo Oscuro</button>
+
+  <!-- Sección para extraer imágenes de PDF -->
+  <div class="section">
+    <h2>Extraer Imágenes de un PDF</h2>
+    <div id="dropZonePdf">Arrastra y suelta un archivo PDF aquí o haz clic para seleccionarlo</div>
+    <canvas id="pdfCanvas"></canvas>
+    <!-- Barra de carga -->
+    <div id="progressContainer">
+      <div id="progressBar"></div>
+    </div>
+    <!-- Botones de acción -->
+    <button id="downloadAllImages" style="display: none;">Descargar Imágenes</button>
+    <button id="downloadAllImagesBN" style="display: none;">Descargar Imágenes Escaneadas</button>
+    <button id="cancelExtract" style="display: none;">Cancelar</button>
+    <!-- (Opcional) Botón para editar documento extraído
+    <button id="editExtracted" style="display: none;">Editar Documento</button> -->
+  </div>
+  
+  <!-- Sección para convertir imágenes a PDF -->
+  <div class="section">
+    <h2>Convertir Imágenes a PDF</h2>
+    <div id="dropZone">Arrastra y suelta imágenes aquí o haz clic para seleccionarlas</div>
+    <button id="generatePdf" disabled>Generar PDF</button>
+    <button id="generatePdfBN" disabled>Generar PDF Escaneado</button>
+    <button id="cancelPdf" style="display: none;">Cancelar</button>
+    <!-- Botón para editar el documento (para luego descargar en PDF) -->
+    <button id="editDocument" style="display: none;">Editar Documento</button>
+  </div>
+
+  <!-- Nueva sección: Editar imágenes o documentos sin cambiar el formato -->
+  <div class="section" id="editSection">
+    <h2>Editar imágenes o documentos</h2>
+    <div id="editDropZone">Arrastra y suelta una imagen o PDF aquí o haz clic para seleccionarlo</div>
+    <div id="editPreviewContainer">
+      <img id="editPreview" src="" alt="Vista previa" style="display:none;">
+      <canvas id="editPdfCanvas" style="display:none;"></canvas>
+    </div>
+    <button id="openEditor" style="display: none;">Editar</button>
+    <button id="downloadEdited" style="display: none;">Descargar</button>
+    <button id="cancelEditSection" style="display: none;">Cancelar</button>
+  </div>
+
+  <!-- Modal para editar (sólo con botón de descarga con filtro escáner y recorte) -->
+  <div id="editorModal">
+    <div id="editorContent">
+      <h2>Editar Documento</h2>
+      <img id="editorImage" src="" alt="Editor">
+      <div style="margin-top:10px;">
+        <button id="applyEdit">Descargar con filtro escáner</button>
+        <button id="cancelEdit">Cancelar Edición</button>
+      </div>
+    </div>
+  </div>
+  <script src="./js/script.js"></script>
+</body>
+</html>
