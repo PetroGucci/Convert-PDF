@@ -218,7 +218,6 @@
     const generatePdfButton = document.getElementById('generatePdf');
     const generatePdfBNButton = document.getElementById('generatePdfBN');
     const cancelPdfButton = document.getElementById('cancelPdf');
-    const editDocumentButton = document.getElementById('editDocument');
     let selectedImages = [];
 
     dropZoneConv.addEventListener('dragover', (e) => { e.preventDefault(); dropZoneConv.classList.add('dragover'); });
@@ -244,7 +243,6 @@
         generatePdfButton.disabled = false;
         generatePdfBNButton.disabled = false;
         cancelPdfButton.style.display = 'inline-block';
-        editDocumentButton.style.display = 'inline-block';
       } else {
         alert('Por favor, selecciona imágenes válidas (PNG o JPEG).');
       }
@@ -289,7 +287,6 @@
               generatePdfButton.disabled = true;
               generatePdfBNButton.disabled = true;
               cancelPdfButton.style.display = 'none';
-              editDocumentButton.style.display = 'none';
             }
           };
           img.src = event.target.result;
@@ -339,7 +336,6 @@
               generatePdfButton.disabled = true;
               generatePdfBNButton.disabled = true;
               cancelPdfButton.style.display = 'none';
-              editDocumentButton.style.display = 'none';
             }
           };
           img.src = event.target.result;
@@ -354,16 +350,6 @@
       generatePdfButton.disabled = true;
       generatePdfBNButton.disabled = true;
       cancelPdfButton.style.display = 'none';
-      editDocumentButton.style.display = 'none';
-    });
-
-    editDocumentButton.addEventListener('click', () => {
-      if(selectedImages.length === 0) return;
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        openEditor(event.target.result);
-      };
-      reader.readAsDataURL(selectedImages[0]);
     });
 
     /* ====================================================
