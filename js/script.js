@@ -65,25 +65,25 @@ toggleDarkModeButton.addEventListener('click', () => {
 
 
     /* ====================================================
-       Modal de edición (se usará para aplicar recorte y filtro)
+      Modal de edición (se usará para aplicar recorte y filtro)
     ==================================================== */
     let cropper = null;
     let editedImageData = null; // Se almacenará la imagen editada
 
-     function openEditor(dataURL) {
-       const editorModal = document.getElementById('editorModal');
-       const editorImage = document.getElementById('editorImage');
-       editorImage.src = dataURL;
-       if(cropper) { cropper.destroy(); }
-       cropper = new Cropper(editorImage, {
-         viewMode: 1,
-         movable: true,
-         zoomable: true,
-         scalable: true,
-         cropBoxResizable: true,
-       });
-       editorModal.style.display = 'block';
-     }
+    function openEditor(dataURL) {
+      const editorModal = document.getElementById('editorModal');
+      const editorImage = document.getElementById('editorImage');
+      editorImage.src = dataURL;
+      if(cropper) { cropper.destroy(); }
+      cropper = new Cropper(editorImage, {
+        viewMode: 1,
+        movable: true,
+        zoomable: true,
+        scalable: true,
+        cropBoxResizable: true,
+      });
+      editorModal.style.display = 'block';
+    }
   
     function closeEditor() {
       const editorModal = document.getElementById('editorModal');
@@ -124,7 +124,7 @@ toggleDarkModeButton.addEventListener('click', () => {
     });
 
     /* ====================================================
-       Sección: Extraer imágenes de PDF (ya existente)
+      Sección: Extraer imágenes de PDF (ya existente)
     ==================================================== */
     const dropZonePdf = document.getElementById('dropZonePdf');
     const pdfCanvas = document.getElementById('pdfCanvas');
@@ -278,7 +278,7 @@ toggleDarkModeButton.addEventListener('click', () => {
     }
 
     /* ====================================================
-       Sección: Convertir imágenes a PDF (ya existente)
+      Sección: Convertir imágenes a PDF (ya existente)
     ==================================================== */
     const dropZoneConv = document.getElementById('dropZone');
     const generatePdfButton = document.getElementById('generatePdf');
@@ -433,7 +433,7 @@ toggleDarkModeButton.addEventListener('click', () => {
     });
 
     /* ====================================================
-       SECCIÓN: Editar imágenes o documentos sin conversión
+      SECCIÓN: Editar imágenes o documentos sin conversión
     ==================================================== */
     const editDropZone = document.getElementById('editDropZone');
     const editPreviewContainer = document.getElementById('editPreviewContainer');
@@ -459,47 +459,47 @@ toggleDarkModeButton.addEventListener('click', () => {
     });
 
     function handleEditFile(file) {
-     if(!file) return;
-     editDropZone.textContent = `Archivo cargado: ${file.name}`;
-     editPreviewContainer.style.display = 'block';
-     cancelEditSectionButton.style.display = 'inline-block';
-     openEditorButton.style.display = 'inline-block';
-     downloadEditedButton.style.display = 'inline-block';
-     if(file.type.startsWith('image/')) {
-       editFileType = "image";
-       editOriginalMime = file.type;
-       const reader = new FileReader();
-       reader.onload = function(event) {
-         editOriginalData = event.target.result;
-         editPreview.src = editOriginalData;
-         editPreview.style.display = 'block';
-         editPdfCanvas.style.display = 'none';
-       };
-       reader.readAsDataURL(file);
-     } else if(file.type === 'application/pdf') {
-       editFileType = "pdf";
-       const fileReader = new FileReader();
-       fileReader.onload = async function(event) {
-         const pdfData = new Uint8Array(event.target.result);
-         const pdf = await pdfjsLib.getDocument(pdfData).promise;
-         const page = await pdf.getPage(1);
-         const viewport = page.getViewport({ scale: 1.5 });
-         editPdfCanvas.width = viewport.width;
-         editPdfCanvas.height = viewport.height;
-         const ctx = editPdfCanvas.getContext('2d');
-         await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-         editOriginalData = editPdfCanvas.toDataURL('image/png');
-         editPreview.style.display = 'none';
-         editPdfCanvas.style.display = 'block';
+    if(!file) return;
+    editDropZone.textContent = `Archivo cargado: ${file.name}`;
+    editPreviewContainer.style.display = 'block';
+    cancelEditSectionButton.style.display = 'inline-block';
+    openEditorButton.style.display = 'inline-block';
+    downloadEditedButton.style.display = 'inline-block';
+    if(file.type.startsWith('image/')) {
+      editFileType = "image";
+      editOriginalMime = file.type;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        editOriginalData = event.target.result;
+        editPreview.src = editOriginalData;
+        editPreview.style.display = 'block';
+        editPdfCanvas.style.display = 'none';
       };
-       fileReader.readAsArrayBuffer(file);
-     } else {
-       alert('Formato no soportado');
-       }
-     
-     openEditorButton.addEventListener('click', () => {
-       if(editOriginalData) { openEditor(editOriginalData);ß }
-     });
+      reader.readAsDataURL(file);
+    } else if(file.type === 'application/pdf') {
+    editFileType = "pdf";
+    const fileReader = new FileReader();
+    fileReader.onload = async function(event) {
+        const pdfData = new Uint8Array(event.target.result);
+        const pdf = await pdfjsLib.getDocument(pdfData).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
+        editPdfCanvas.width = viewport.width;
+        editPdfCanvas.height = viewport.height;
+        const ctx = editPdfCanvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+        editOriginalData = editPdfCanvas.toDataURL('image/png');
+        editPreview.style.display = 'none';
+        editPdfCanvas.style.display = 'block';
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      alert('Formato no soportado');
+      }
+    
+    openEditorButton.addEventListener('click', () => {
+      if(editOriginalData) { openEditor(editOriginalData);ß }
+    });
 
     downloadEditedButton.addEventListener('click', () => {
       if(editFileType === "image") {
