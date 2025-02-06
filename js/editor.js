@@ -212,9 +212,32 @@
       });
     }
 
-    /* ====================================================
-      Sección: Convertir imágenes a PDF (ya existente)
-    ==================================================== */
+ // =====================================
+// FUNCIONES AUXILIARES PARA CARGAR IMÁGENES
+// =====================================
+
+function readImageAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(dataURL) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = dataURL;
+  });
+}
+
+// =====================================
+// Sección: Convertir imágenes a PDF (ya existente)
+// =====================================
+
     const dropZoneConv = document.getElementById('dropZone');
     const generatePdfButton = document.getElementById('generatePdf');
     const generatePdfBNButton = document.getElementById('generatePdfBN');
@@ -249,87 +272,78 @@
       }
     }
 
-    generatePdfButton.addEventListener('click', () => {
+    generatePdfButton.addEventListener('click', async () => {
       if (selectedImages.length === 0) return;
       const { jsPDF } = window.jspdf;
-      let firstImage = true;
-      let pdf;
-      let processed = 0;
-      selectedImages.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          const img = new Image();
-          img.onload = function () {
-            if (firstImage) {
-              pdf = new jsPDF({
-                orientation: img.width > img.height ? 'landscape' : 'portrait',
-                unit: 'px',
-                format: [img.width, img.height],
-              });
-              firstImage = false;
-            } else {
-              pdf.addPage([img.width, img.height]);
-            }
-            pdf.addImage(event.target.result, 'JPEG', 0, 0, img.width, img.height);
-            processed++;
-            if (processed === selectedImages.length) {
-              pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf")); // Mantiene el nombre de la primera imagen
-            }
-          };
-          img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
+      let pdf = null;
+    
+      for (let i = 0; i < selectedImages.length; i++) {
+        const file = selectedImages[i];
+        const imgData = await readImageAsDataURL(file);
+        const img = await loadImage(imgData);
+    
+        const width = img.width;
+        const height = img.height;
+    
+        if (i === 0) {
+          pdf = new jsPDF({
+            orientation: width > height ? 'landscape' : 'portrait',
+            unit: 'px',
+            format: [width, height],
+          });
+        } else {
+          pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
+        }
+    
+        pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+      }
+    
+      if (pdf) {
+        pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
+      }
     });
+    
 
-    generatePdfBNButton.addEventListener('click', () => {
-      if(selectedImages.length === 0) return;
+    generatePdfBNButton.addEventListener('click', async () => {
+      if (selectedImages.length === 0) return;
       const { jsPDF } = window.jspdf;
-      let firstImage = true;
-      let pdf;
-      let processed = 0;
-      selectedImages.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          const img = new Image();
-          img.onload = function() {
-            const scaleFactor = 0.9;
-            const newWidth = img.width * scaleFactor;
-            const newHeight = img.height * scaleFactor;
-            const canvas = document.createElement('canvas');
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
-            // Aplicar filtro de escaneo
-            applyScanFilterToCanvas(canvas, newWidth, newHeight);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.85);
-            if(firstImage) {
-              pdf = new jsPDF({
-                orientation: newWidth > newHeight ? 'landscape' : 'portrait',
-                unit: 'px',
-                format: [newWidth, newHeight],
-              });
-              firstImage = false;
-            } else {
-              pdf.addPage([newWidth, newHeight]);
-            }
-            pdf.addImage(compressedData, 'JPEG', 0, 0, newWidth, newHeight);
-            processed++;
-            if(processed === selectedImages.length) {
-              pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf")); // Usa el mismo nombre con "_scan"
-              selectedImages = [];
-              dropZoneConv.textContent = 'Arrastra y suelta imágenes aquí o haz clic para seleccionarlas';
-              generatePdfButton.disabled = true;
-              generatePdfBNButton.disabled = true;
-              cancelPdfButton.style.display = 'none';
-            }
-          };
-          img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
+      let pdf = null;
+    
+      for (let i = 0; i < selectedImages.length; i++) {
+        const file = selectedImages[i];
+        const imgData = await readImageAsDataURL(file);
+        const img = await loadImage(imgData);
+    
+        const width = img.width;
+        const height = img.height;
+    
+        // Crear un canvas para aplicar el filtro escáner
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        applyScanFilterToCanvas(canvas, width, height);
+        const filteredImgData = canvas.toDataURL('image/jpeg', 0.85);
+    
+        if (i === 0) {
+          pdf = new jsPDF({
+            orientation: width > height ? 'landscape' : 'portrait',
+            unit: 'px',
+            format: [width, height],
+          });
+        } else {
+          pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
+        }
+    
+        pdf.addImage(filteredImgData, 'JPEG', 0, 0, width, height);
+      }
+    
+      if (pdf) {
+        pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, "_scan.pdf"));
+      }
     });
+    
 
     cancelPdfButton.addEventListener('click', () => {
       selectedImages = [];
