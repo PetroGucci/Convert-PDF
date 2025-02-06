@@ -124,13 +124,13 @@
         downloadBtn.onclick = async function() {
           const zip = new JSZip();
           extractedImages.forEach(imgObj => {
-            const base64 = imgObj.data.split(',')[1];
-            zip.file(imgObj.filename, base64, { base64: true });
+            zip.file(imgObj.filename, imgObj.data.split(',')[1], { base64: true });
           });
+        
           const content = await zip.generateAsync({ type: "blob" });
           const link = document.createElement('a');
           link.href = URL.createObjectURL(content);
-          link.download = `${baseName}_imagenes.zip`;
+          link.download = `${baseName}.zip`; // Usa el mismo nombre del PDF original
           link.click();
           downloadBtn.style.display = 'none';
           downloadBtnBN.style.display = 'none';
@@ -140,14 +140,15 @@
         };
         downloadBtnBN.onclick = async function() {
           const zip = new JSZip();
-          for(const imgObj of extractedImages) {
+          for (const imgObj of extractedImages) {
             const grayDataURL = await convertDataURLWithScanFilter(imgObj.data);
             zip.file(imgObj.filename, grayDataURL.split(',')[1], { base64: true });
           }
+        
           const content = await zip.generateAsync({ type: "blob" });
           const link = document.createElement('a');
           link.href = URL.createObjectURL(content);
-          link.download = `${baseName}_imagenes_scan.zip`;
+          link.download = `${baseName}.zip`; // Usa el mismo nombre con "_scan"
           link.click();
           downloadBtn.style.display = 'none';
           downloadBtnBN.style.display = 'none';
@@ -249,44 +250,30 @@
     }
 
     generatePdfButton.addEventListener('click', () => {
-      if(selectedImages.length === 0) return;
+      if (selectedImages.length === 0) return;
       const { jsPDF } = window.jspdf;
       let firstImage = true;
       let pdf;
       let processed = 0;
       selectedImages.forEach((file) => {
         const reader = new FileReader();
-        reader.onload = function(event) {
+        reader.onload = function (event) {
           const img = new Image();
-          img.onload = function() {
-            const scaleFactor = 0.9;
-            const newWidth = img.width * scaleFactor;
-            const newHeight = img.height * scaleFactor;
-            const canvas = document.createElement('canvas');
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
-            const compressedData = canvas.toDataURL('image/jpeg', 0.85);
-            if(firstImage) {
+          img.onload = function () {
+            if (firstImage) {
               pdf = new jsPDF({
-                orientation: newWidth > newHeight ? 'landscape' : 'portrait',
+                orientation: img.width > img.height ? 'landscape' : 'portrait',
                 unit: 'px',
-                format: [newWidth, newHeight],
+                format: [img.width, img.height],
               });
               firstImage = false;
             } else {
-              pdf.addPage([newWidth, newHeight]);
+              pdf.addPage([img.width, img.height]);
             }
-            pdf.addImage(compressedData, 'JPEG', 0, 0, newWidth, newHeight);
+            pdf.addImage(event.target.result, 'JPEG', 0, 0, img.width, img.height);
             processed++;
-            if(processed === selectedImages.length) {
-              pdf.save('imagenes_convertidas.pdf');
-              selectedImages = [];
-              dropZoneConv.textContent = 'Arrastra y suelta imágenes aquí o haz clic para seleccionarlas';
-              generatePdfButton.disabled = true;
-              generatePdfBNButton.disabled = true;
-              cancelPdfButton.style.display = 'none';
+            if (processed === selectedImages.length) {
+              pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf")); // Mantiene el nombre de la primera imagen
             }
           };
           img.src = event.target.result;
@@ -330,7 +317,7 @@
             pdf.addImage(compressedData, 'JPEG', 0, 0, newWidth, newHeight);
             processed++;
             if(processed === selectedImages.length) {
-              pdf.save('imagenes_convertidas_scan.pdf');
+              pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf")); // Usa el mismo nombre con "_scan"
               selectedImages = [];
               dropZoneConv.textContent = 'Arrastra y suelta imágenes aquí o haz clic para seleccionarlas';
               generatePdfButton.disabled = true;
