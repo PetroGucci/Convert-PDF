@@ -105,7 +105,7 @@
       fileReader.onload = async function(e) {
         const pdfData = new Uint8Array(e.target.result);
         const pdf = await pdfjsLib.getDocument(pdfData).promise;
-        const baseName = pdfFile.name.replace(/\.[^/.]+$/, "");
+        const baseName = pdfFile.name.replace(/\.[^/.]+$/, "");//nombre de la extraccion de imagenes de un pdf
         const extractedImages = [];
         for(let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
@@ -114,7 +114,7 @@
           pdfCanvas.height = viewport.height;
           await page.render({ canvasContext: ctx, viewport: viewport }).promise;
           const imageData = pdfCanvas.toDataURL('image/png');
-          extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.png` });
+          extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.png` });//nombre de la extraccion de imagenes de un pdf para la descarga
           progressBar.style.width = ((i / pdf.numPages)*100) + '%';
         }
         setTimeout(() => { progressContainer.style.display = 'none'; }, 500);
@@ -218,7 +218,7 @@
     const generatePdfButton = document.getElementById('generatePdf');
     const generatePdfBNButton = document.getElementById('generatePdfBN');
     const cancelPdfButton = document.getElementById('cancelPdf');
-    let selectedImages = [];
+    let selectedImages = [];//nombre de las imagenes seleccionadas en la de imagenes a PDF
 
     dropZoneConv.addEventListener('dragover', (e) => { e.preventDefault(); dropZoneConv.classList.add('dragover'); });
     dropZoneConv.addEventListener('dragleave', () => { dropZoneConv.classList.remove('dragover'); });
@@ -237,7 +237,7 @@
     });
 
     function processImages(files) {
-      selectedImages = Array.from(files).filter(file => file.type === 'image/png' || file.type === 'image/jpeg');
+      selectedImages = Array.from(files).filter(file => file.type === 'image/png' || file.type === 'image/jpeg');//nombre de las imagenes seleccionadas en la de imagenes a PDF se mustran en pantalla
       if(selectedImages.length > 0) {
         dropZoneConv.textContent = `${selectedImages.length} imágenes cargadas`;
         generatePdfButton.disabled = false;
@@ -380,7 +380,7 @@
 
     function handleEditFile(file) {
     if(!file) return;
-    editDropZone.textContent = `Archivo cargado: ${file.name}`;
+    editDropZone.textContent = `Archivo cargado: ${file.name}`;//nombre de las imagenes en la funcion de editar
     editPreviewContainer.style.display = 'block';
     cancelEditSectionButton.style.display = 'inline-block';
     openEditorButton.style.display = 'inline-block';
