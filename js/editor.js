@@ -38,7 +38,7 @@
       if(editFileType === "image") {
         const link = document.createElement('a');
         link.href = editedData;
-        link.download = 'imagen_editada.jpg';
+        link.download = editFileName;
         link.click();
       } else if(editFileType === "pdf") {
         const { jsPDF } = window.jspdf;
@@ -50,7 +50,7 @@
             format: [img.width, img.height]
           });
           pdf.addImage(editedData, 'JPEG', 0, 0, img.width, img.height);
-          pdf.save('documento_editado.pdf');
+          pdf.save(editFileName.replace(/\.pdf$/, '.pdf'));
         };
         img.src = editedData;
       }
@@ -380,6 +380,7 @@
 
     function handleEditFile(file) {
     if(!file) return;
+    editFileName = file.name; // Guarda el nombre original del archivo
     editDropZone.textContent = `Archivo cargado: ${file.name}`;//nombre de las imagenes en la funcion de editar
     editPreviewContainer.style.display = 'block';
     cancelEditSectionButton.style.display = 'inline-block';
