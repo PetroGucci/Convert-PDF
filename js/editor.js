@@ -68,7 +68,6 @@
     const cancelExtractButton = document.getElementById('cancelExtract');
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
-    // const editExtractedButton = document.getElementById('editExtracted');
 
     dropZonePdf.addEventListener('dragover', (e) => { e.preventDefault(); dropZonePdf.classList.add('dragover'); });
     dropZonePdf.addEventListener('dragleave', () => { dropZonePdf.classList.remove('dragover'); });
@@ -120,7 +119,6 @@
         setTimeout(() => { progressContainer.style.display = 'none'; }, 500);
         downloadBtn.style.display = 'inline-block';
         downloadBtnBN.style.display = 'inline-block';
-        // editExtractedButton.style.display = 'inline-block';
         downloadBtn.onclick = async function() {
           const zip = new JSZip();
           extractedImages.forEach(imgObj => {
@@ -134,7 +132,6 @@
           link.click();
           downloadBtn.style.display = 'none';
           downloadBtnBN.style.display = 'none';
-          // editExtractedButton.style.display = 'none';
           cancelExtractButton.style.display = 'none';
           dropZonePdf.textContent = 'Arrastra y suelta un archivo PDF aquí o haz clic para seleccionarlo';
         };
@@ -152,7 +149,6 @@
           link.click();
           downloadBtn.style.display = 'none';
           downloadBtnBN.style.display = 'none';
-          // editExtractedButton.style.display = 'none';
           cancelExtractButton.style.display = 'none';
           dropZonePdf.textContent = 'Arrastra y suelta un archivo PDF aquí o haz clic para seleccionarlo';
         };
@@ -165,7 +161,6 @@
       dropZonePdf.textContent = 'Arrastra y suelta un archivo PDF aquí o haz clic para seleccionarlo';
       downloadBtn.style.display = 'none';
       downloadBtnBN.style.display = 'none';
-      // editExtractedButton.style.display = 'none';
       cancelExtractButton.style.display = 'none';
       progressContainer.style.display = 'none';
     });
