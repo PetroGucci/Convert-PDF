@@ -13,6 +13,7 @@ body {
   border-radius: 10px;
   background-color: #f8f9fa;
 }
+
 .section h2 {
   margin-bottom: 20px;
 }
@@ -24,6 +25,12 @@ body {
   cursor: pointer;
   color: #6c757d;
 }
+
+img {
+  width: 150px;  /* Cambia el ancho de la imagen */
+  height: auto;  /* Mantiene la relación de aspecto */
+  margin-top: 10px;}
+  
 .dragover {
   background-color: #e9ecef;
   color: #495057;
