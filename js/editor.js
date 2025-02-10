@@ -60,7 +60,7 @@
     /* ====================================================
       Sección: Extraer imágenes de PDF (ya existente)
     ==================================================== */
-    const dropZonePdf = document.getElementById('dropZonePdf');
+    const dropZonePdf = document.getElementById('dropZone');
     const pdfCanvas = document.getElementById('pdfCanvas');
     const ctx = pdfCanvas.getContext('2d');
     const downloadBtn = document.getElementById('downloadAllImages');
@@ -80,8 +80,10 @@
         dropZonePdf.textContent = `Archivo cargado: ${file.name}`;
         cancelExtractButton.style.display = 'inline-block';
         extractImagesFromPdf(file);
-      } else { alert('Por favor, arrastra un archivo válido (PDF).'); }
-    });
+      // } else { 
+      //   alert('Por favor, arrastra un archivo válido (PDF).'); 
+      // }
+    }});
     dropZonePdf.addEventListener('click', () => {
       const input = document.createElement('input');
       input.type = 'file';
@@ -93,8 +95,10 @@
           dropZonePdf.textContent = `Archivo cargado: ${file.name}`;
           cancelExtractButton.style.display = 'inline-block';
           extractImagesFromPdf(file);
-        } else { alert('Por favor, selecciona un archivo válido (PDF).'); }
-      });
+        // } else { 
+        //   alert('Por favor, selecciona un archivo válido (PDF).'); 
+        // }
+    }});
     });
 
     async function extractImagesFromPdf(pdfFile) {
@@ -270,7 +274,7 @@ function loadImage(dataURL) {
         generatePdfBNButton.style.display = 'inline-block';
         cancelPdfButton.style.display = 'inline-block';
       } else {
-        alert('Por favor, selecciona imágenes válidas (PNG o JPEG).');
+        // alert('Por favor, selecciona imágenes válidas (PNG o JPEG).');
       }
     }
     

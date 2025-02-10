@@ -26,7 +26,8 @@
   <!-- Sección para extraer imágenes de PDF -->
   <div class="section">
     <img src="./img/PDF a IMG.png" alt="./img/PDF a IMG.png">
-    <div id="dropZonePdf">Arrastra y suelta un archivo PDF aquí o haz clic para seleccionarlo</div>
+    <h2>Extrae o converte tus archivos PDF</h2>
+    <div id="dropZone">Arrastra y suelta tu archivo aquí o haz clic para seleccionarlo</div>
     <canvas id="pdfCanvas"></canvas>
     <!-- Barra de carga -->
     <div id="progressContainer">
@@ -36,20 +37,23 @@
     <button id="downloadAllImages" style="display: none;">Descargar Imágenes</button>
     <button id="downloadAllImagesBN" style="display: none;">Descargar Imágenes Escaneadas</button>
     <button id="cancelExtract" style="display: none;">Cancelar</button>
-  </div>
-  
-  <!-- Sección para convertir imágenes a PDF -->
-  <div class="section">
-    <img src="./img/png-to-pdf.png" alt="./img/png-to-pdf.png">
-    <div id="dropZone">Arrastra y suelta imágenes aquí o haz clic para seleccionarlas</div>
     <button id="generatePdf" style="display: none;">Generar PDF</button>
     <button id="generatePdfBN" style="display: none;">Generar PDF Escaneado</button>
     <button id="cancelPdf" style="display: none;">Cancelar</button>
   </div>
+  
+  <!-- Sección para convertir imágenes a PDF -->
+  <!-- <div class="section">
+    <img src="./img/png-to-pdf.png" alt="./img/png-to-pdf.png">
+    <div id="dropZone">Arrastra y suelta imágenes aquí o haz clic para seleccionarlas</div>
+    
+    
+  </div> -->
 
   <!-- Nueva sección: Editar imágenes o documentos sin cambiar el formato -->
   <div class="section" id="editSection">
     <img src="./img/Editar.png" alt="./img/Editar.png">
+    <h2>Editar imagenes o documentos</h2>
     <div id="editDropZone">Arrastra y suelta una imagen o PDF aquí o haz clic para seleccionarlo</div>
     <div id="editPreviewContainer">
       <img id="editPreview" src="" alt="Vista previa" style="display:none;">
