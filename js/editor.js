@@ -112,8 +112,8 @@
           pdfCanvas.width = viewport.width;
           pdfCanvas.height = viewport.height;
           await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-          const imageData = pdfCanvas.toDataURL('image/png');
-          extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.png` });//nombre de la extraccion de imagenes de un pdf para la descarga
+          const imageData = pdfCanvas.toDataURL('image/jpg');
+          extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.jpg` });//nombre de la extraccion de imagenes de un pdf para la descarga
           progressBar.style.width = ((i / pdf.numPages)*100) + '%';
         }
         setTimeout(() => { progressContainer.style.display = 'none'; }, 500);
