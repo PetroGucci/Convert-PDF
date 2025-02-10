@@ -239,6 +239,10 @@ function loadImage(dataURL) {
     const cancelPdfButton = document.getElementById('cancelPdf');
     let selectedImages = [];//nombre de las imagenes seleccionadas en la de imagenes a PDF
 
+    generatePdfButton.style.display = 'none';
+    generatePdfBNButton.style.display = 'none';
+    cancelPdfButton.style.display = 'none';
+
     dropZoneConv.addEventListener('dragover', (e) => { e.preventDefault(); dropZoneConv.classList.add('dragover'); });
     dropZoneConv.addEventListener('dragleave', () => { dropZoneConv.classList.remove('dragover'); });
     dropZoneConv.addEventListener('drop', (e) => {
@@ -256,16 +260,20 @@ function loadImage(dataURL) {
     });
 
     function processImages(files) {
-      selectedImages = Array.from(files).filter(file => file.type === 'image/png' || file.type === 'image/jpeg');//nombre de las imagenes seleccionadas en la de imagenes a PDF se mustran en pantalla
-      if(selectedImages.length > 0) {
+      selectedImages = Array.from(files).filter(file =>
+        file.type === 'image/png' || file.type === 'image/jpeg'
+      );
+      if (selectedImages.length > 0) {
         dropZoneConv.textContent = `${selectedImages.length} imágenes cargadas`;
-        generatePdfButton.disabled = false;
-        generatePdfBNButton.disabled = false;
+        // Muestra los botones al cargar imágenes
+        generatePdfButton.style.display = 'inline-block';
+        generatePdfBNButton.style.display = 'inline-block';
         cancelPdfButton.style.display = 'inline-block';
       } else {
         alert('Por favor, selecciona imágenes válidas (PNG o JPEG).');
       }
     }
+    
 
     generatePdfButton.addEventListener('click', async () => {
       if (selectedImages.length === 0) return;
@@ -343,8 +351,8 @@ function loadImage(dataURL) {
     cancelPdfButton.addEventListener('click', () => {
       selectedImages = [];
       dropZoneConv.textContent = 'Arrastra y suelta imágenes aquí o haz clic para seleccionarlas';
-      generatePdfButton.disabled = true;
-      generatePdfBNButton.disabled = true;
+      generatePdfButton.style.display = 'none';
+      generatePdfBNButton.style.display = 'none';
       cancelPdfButton.style.display = 'none';
     });
 
