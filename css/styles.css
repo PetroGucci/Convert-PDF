@@ -5,133 +5,45 @@ body {
   transition: 0.3s;
 }
 .section {
-  /* margin: 20px auto; */
   margin: 1rem auto;
   padding: 15px;
   width: 100%;
   max-width: 30dvw;
-  border: 2px solid #007bff;
+  border: 2px solid #0056b3;
   border-radius: 10px;
-  background-color: #f8f9fa;
+  background-color: #f0f8ff;
   transition: 0.3s;
 }
 
 .section h2 {
   margin: auto;
 }
-#dropZone, #dropZonePdf, #editDropZone {
-  border: 2px dashed #007bff;
+#dropZone, #editDropZone {
+  border: 2px dashed #0056b3;
   border-radius: 10px;
   padding: 20px;
   margin: 20px auto;
   cursor: pointer;
-  color: #6c757d;
+  color: #004080;
   transition: 0.3s;
 }
 
 img {
-  width: 15dvw;  /* Cambia el ancho de la imagen */
-  height: auto;  /* Mantiene la relación de aspecto */
-  margin-top: 10px;}
+  width: 15dvw;
+  height: auto;
+  margin-top: 10px;
+}
   
 .dragover {
-  background-color: #e9ecef;
-  color: #495057;
+  background-color: #a8c7ff;
+  color: #003366;
   transition: 0.3s;
-}
-#cancelExtract{
-  background-color: #dc3545; /* Rojo */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-#cancelExtract:hover {
-  background-color: #c82333; /* Rojo más oscuro al pasar el mouse */
-  transition: 0.3s;
-}
-.dark-mode #cancelExtract {
-    background-color: #ff4d4d; /* Rojo más brillante */
-}
-
-.dark-mode #cancelExtract:hover {
-    background-color: #ff1a1a; /* Rojo más fuerte */
-}
-#cancelPdf {
-  background-color: #dc3545; /* Rojo normal */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#cancelPdf:hover {
-  background-color: #c82333; /* Rojo más oscuro */
-  transition: 0.3s;
-  
-}
-
-/* Cuando el modo oscuro está activado */
-.dark-mode #cancelPdf {
-  background-color: #ff4d4d; /* Rojo más brillante */
-}
-
-.dark-mode #cancelPdf:hover {
-  background-color: #ff1a1a; /* Rojo más fuerte */
-}
-#cancelEditSection {
-  background-color: #dc3545; /* Rojo normal */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-#cancelEditSection:hover {
-  background-color: #c82333; /* Rojo más oscuro */
-}
-
-/* Cuando el modo oscuro está activado */
-.dark-mode #cancelEditSection {
-  background-color: #ff4d4d; /* Rojo más brillante */
-}
-
-.dark-mode #cancelEditSection:hover {
-  background-color: #ff1a1a; /* Rojo más fuerte */
-}
-#cancelEdit {
-  background-color: #dc3545; /* Rojo normal */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#cancelEdit:hover {
-  background-color: #c82333; /* Rojo más oscuro */
-  transition: 0.3s;
-}
-
-/* Cuando el modo oscuro está activado */
-.dark-mode #cancelEdit {
-  background-color: #ff4d4d; /* Rojo más brillante */
-}
-
-.dark-mode #cancelEdit:hover {
-  background-color: #ff1a1a; /* Rojo más fuerte */
 }
 button {
   margin-top: 10px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #0056b3;
   color: white;
   border: none;
   border-radius: 5px;
@@ -139,69 +51,59 @@ button {
   transition: 0.3s;
 }
 button:hover {
-  background-color: #0056b3;
+  background-color: #004080;
   transition: 0.3s;
 }
 canvas { display: none; }
-/* Barra de carga */
+
 #progressContainer {
   display: none;
   width: 100%;
   max-width: 25dvw;
-  background-color: #e0e0e0;
+  background-color: #cfe2ff;
   border-radius: 10px;
   margin: 10px auto;
 }
 #progressBar {
   width: 0%;
   height: 20px;
-  background-color: #007bff;
+  background-color: #0056b3;
   border-radius: 10px;
   transition: width 0.3s, background-color 0.3s;
 }
-/* Posicionar botón de Modo Oscuro */
+
 #toggleDarkMode {
   position: absolute;
   top: 10px;
   right: 15px;
   z-index: 999;
   transition: 0.3s;
-
 }
-/* Modo Oscuro */
+
 .dark-mode {
   background-color: #121212;
   color: #e0e0e0;
 }
 .dark-mode .section {
   background-color: #1e1e1e;
-  border-color: #bb86fc;
+  border-color: #3a7bd5;
 }
 .dark-mode #dropZone, .dark-mode #dropZonePdf, .dark-mode #editDropZone {
-  border-color: #bb86fc;
+  border-color: #3a7bd5;
   color: #e0e0e0;
 }
 .dark-mode button {
-  background-color: #bb86fc;
+  background-color: #3a7bd5;
 }
 .dark-mode button:hover {
-  background-color: #9a67ea;
+  background-color: #2c5aa0;
 }
 .dark-mode #progressContainer {
   background-color: #333;
 }
 .dark-mode #progressBar {
-  background-color: #bb86fc;
+  background-color: #3a7bd5;
 }
-/* Modal para edición */
-/* #editorModal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  z-index: 2000;
-} */
 
 #editorModal {
   display: none;
@@ -213,18 +115,18 @@ canvas { display: none; }
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;} /* Fondo semi-transparente */ 
+  z-index: 1000;
+}
 
 #editorContent {
   position: relative;
-  /* margin: 50px auto; */
   margin: 60rem auto;
   padding: 20px;
   background: white;
   width: 90%;
   max-width: 60dvw;
   border-radius: 10px;
-  border: 2px solid #007bff;
+  border: 2px solid #0056b3;
 }
 .dark-mode #editorContent {
   color: white;
@@ -235,7 +137,7 @@ canvas { display: none; }
   width: 90%;
   max-width: 30dvw;
   border-radius: 10px;
-  border: 2px solid #bb86fc;
+  border: 2px solid #3a7bd5;
 }
 
 .cropper-container {
@@ -246,45 +148,16 @@ canvas { display: none; }
   align-items: center;
 } 
 
-/* Ajusta la imagen dentro del Cropper */
 .cropper-img-container,
 .cropper-view-box {
   max-width: 100% !important;
   max-height: 80vh !important;
 }
 
-/* .cropper-container {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100% !important;
-  max-height: 80vh !important;
-  overflow: hidden !important;
-}
-
-.cropper-canvas,
-.cropper-view-box {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
-}
-
-.cropper-canvas img {
-  display: block !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
-  object-fit: contain !important;
-} */
-
 #editorImage {
   max-width: 100%;
   max-height: 400px;
 }
-/* Sección de edición sin conversión */
 #editPreviewContainer {
   display: none;
   margin: 10px auto;
@@ -296,4 +169,35 @@ canvas { display: none; }
 #editPdfCanvas {
   display: none;
   max-width: 100%;
+}
+
+/* Botones de cancelar conservan el color rojo */
+#cancelExtract, #cancelPdf, #cancelEditSection, #cancelEdit {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#cancelExtract:hover, #cancelPdf:hover, #cancelEditSection:hover, #cancelEdit:hover {
+  background-color: #c82333;
+}
+
+.dark-mode #cancelExtract, .dark-mode #cancelPdf, .dark-mode #cancelEditSection, .dark-mode #cancelEdit {
+  background-color: #ff4d4d;
+}
+
+.dark-mode #cancelExtract:hover, .dark-mode #cancelPdf:hover, .dark-mode #cancelEditSection:hover, .dark-mode #cancelEdit:hover {
+  background-color: #ff1a1a;
+}
+h1, h2 {
+  color: #003366; /* Azul oscuro en modo claro */
+  transition: color 0.3s;
+}
+
+.dark-mode h1, .dark-mode h2 {
+  color: #f0f8ff; /* Azul claro en modo oscuro */
 }
