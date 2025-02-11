@@ -120,23 +120,17 @@ canvas { display: none; }
 
 #editorContent {
   position: relative;
-  margin: 60rem auto;
+  margin: 50px auto;
   padding: 20px;
   background: white;
   width: 90%;
-  max-width: 60dvw;
+  max-width: 30dvw;
   border-radius: 10px;
   border: 2px solid #0056b3;
 }
 .dark-mode #editorContent {
   color: white;
-  position: relative;
-  margin: 50px auto;
-  padding: 20px;
   background: #282828;
-  width: 90%;
-  max-width: 30dvw;
-  border-radius: 10px;
   border: 2px solid #3a7bd5;
 }
 
