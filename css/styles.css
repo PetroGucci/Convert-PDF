@@ -15,7 +15,7 @@ body {
 }
 
 .section h2 {
-  margin-bottom: 20px;
+  margin: auto;
 }
 #dropZone, #dropZonePdf, #editDropZone {
   border: 2px dashed #007bff;
@@ -27,7 +27,7 @@ body {
 }
 
 img {
-  width: 20dvw;  /* Cambia el ancho de la imagen */
+  width: 15dvw;  /* Cambia el ancho de la imagen */
   height: auto;  /* Mantiene la relación de aspecto */
   margin-top: 10px;}
   
