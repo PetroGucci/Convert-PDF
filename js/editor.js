@@ -390,7 +390,7 @@ function loadImage(dataURL) {
     if(!file) return;
     editFileName = file.name; // Guarda el nombre original del archivo
     editDropZone.textContent = `Archivo cargado: ${file.name}`;//nombre de las imagenes en la funcion de editar
-    editPreviewContainer.style.display = 'block';
+    editPreviewContainer.style.display = 'none';
     cancelEditSectionButton.style.display = 'inline-block';
     openEditorButton.style.display = 'inline-block';
     downloadEditedButton.style.display = 'inline-block';
@@ -401,7 +401,7 @@ function loadImage(dataURL) {
       reader.onload = function(event) {
         editOriginalData = event.target.result;
         editPreview.src = editOriginalData;
-        editPreview.style.display = 'block';
+        editPreview.style.display = 'none';
         editPdfCanvas.style.display = 'none';
       };
       reader.readAsDataURL(file);
