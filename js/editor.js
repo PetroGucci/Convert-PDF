@@ -92,8 +92,8 @@ dropZone.addEventListener('click', () => {
   input.click();
   input.addEventListener('change', () => {
     if (input.files.length > 0) {
-      // Usamos la misma lógica del drop
-      handleFiles(input.files);
+      // Para input se respeta el orden de selección
+      handleFiles(Array.from(input.files));
     }
   });
 });
@@ -120,6 +120,25 @@ function resetUnifiedPDFState() {
 }
 
 /* ====================================================
+  Función auxiliar para obtener archivos preservando el orden de drop
+==================================================== */
+function getFilesFromDataTransfer(e) {
+  let filesArray = [];
+  if (e.dataTransfer.items) {
+    for (let i = 0; i < e.dataTransfer.items.length; i++) {
+      const item = e.dataTransfer.items[i];
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file) filesArray.push(file);
+      }
+    }
+  } else {
+    filesArray = Array.from(e.dataTransfer.files);
+  }
+  return filesArray;
+}
+
+/* ====================================================
   Función para manejar archivos recibidos (desde drop o input)
 ==================================================== */
 function handleFiles(files) {
@@ -139,7 +158,7 @@ function handleFiles(files) {
     if (currentUnifiedType === "pdf") {
       resetUnifiedPDFState();
     }
-    // Si ya hay imágenes cargadas, se acumulan (no se reemplazan)
+    // Si ya hay imágenes cargadas, se acumulan (manteniendo el orden)
     processImages(files);
   } else {
     alert('Por favor, sube un archivo válido (PDF o imagen).');
@@ -151,7 +170,8 @@ function handleDropEvent(e) {
   e.preventDefault();
   section1.classList.remove('dragover');
   dropZone.classList.remove('dragover');
-  handleFiles(e.dataTransfer.files);
+  const files = getFilesFromDataTransfer(e);
+  handleFiles(files);
 }
 
 /* ====================================================
@@ -317,7 +337,7 @@ function processImages(files) {
     selectedImages = newImages;
     currentUnifiedType = "images";
   } else {
-    // Si ya hay imágenes, se acumulan
+    // Si ya hay imágenes, se acumulan (manteniendo el orden)
     selectedImages = selectedImages.concat(newImages);
   }
   if (selectedImages.length > 0) {
@@ -332,6 +352,7 @@ generatePdfButton.addEventListener('click', async () => {
   if (selectedImages.length === 0) return;
   const { jsPDF } = window.jspdf;
   let pdf = null;
+  // Se recorre selectedImages en el orden en que fueron agregadas
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
@@ -351,6 +372,10 @@ generatePdfButton.addEventListener('click', async () => {
   }
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
+  }
+  // Si solo se tenía una imagen, reseteamos el estado
+  if (selectedImages.length === 1) {
+    resetUnifiedPDFState();
   }
 });
 
@@ -385,6 +410,10 @@ generatePdfBNButton.addEventListener('click', async () => {
   }
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
+  }
+  // Si solo se tenía una imagen, reseteamos el estado
+  if (selectedImages.length === 1) {
+    resetUnifiedPDFState();
   }
 });
 
