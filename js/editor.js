@@ -373,10 +373,8 @@ generatePdfButton.addEventListener('click', async () => {
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   }
-  // Si solo se tenía una imagen, reseteamos el estado
-  if (selectedImages.length === 1) {
-    resetUnifiedPDFState();
-  }
+  // Reiniciamos el estado, sin importar la cantidad de imágenes
+  resetUnifiedPDFState();
 });
 
 generatePdfBNButton.addEventListener('click', async () => {
@@ -411,19 +409,12 @@ generatePdfBNButton.addEventListener('click', async () => {
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   }
-  // Si solo se tenía una imagen, reseteamos el estado
-  if (selectedImages.length === 1) {
-    resetUnifiedPDFState();
-  }
+  // Reiniciamos el estado
+  resetUnifiedPDFState();
 });
 
 cancelPdfButton.addEventListener('click', () => {
-  selectedImages = [];
-  dropZone.textContent = 'Arrastra y suelta imágenes o un archivo PDF aquí o haz clic para seleccionarlos';
-  generatePdfButton.style.display = 'none';
-  generatePdfBNButton.style.display = 'none';
-  cancelPdfButton.style.display = 'none';
-  currentUnifiedType = "";
+  resetUnifiedPDFState();
 });
 
 /* ====================================================
