@@ -14,7 +14,7 @@ function updateImages(isDark) {
   const editorImage = document.getElementById('editorImage');
 
   if (convertImage) {
-    convertImage.src = isDark ? './img/convert_dark.png' : './img/convert_light.png';
+    convertImage.src = isDark ? './img/convert_light.png' : './img/convert_dark.png'; 
   }
 
   if (editorImage) {
