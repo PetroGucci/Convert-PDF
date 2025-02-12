@@ -120,7 +120,7 @@ canvas { display: none; }
 
 #editorContent {
   position: relative;
-  margin: 50px auto;
+  margin: 5rem auto;
   padding: 20px;
   background: white;
   width: 90%;
