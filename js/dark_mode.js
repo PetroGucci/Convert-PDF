@@ -8,6 +8,20 @@ let userPref = localStorage.getItem('user-dark-mode');
 // 2) Detectar preferencia del sistema
 const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
+// Función para actualizar las imágenes según el modo
+function updateImages(isDark) {
+  const convertImage = document.getElementById('convertImage');
+  const editorImage = document.getElementById('editorImage');
+
+  if (convertImage) {
+    convertImage.src = isDark ? './img/convert_dark.png' : './img/convert_light.png';
+  }
+
+  if (editorImage) {
+    editorImage.src = isDark ? './img/editor_dark.png' : './img/editor_light.png';
+  }
+}
+
 // 3) Función para aplicar modo oscuro/claro según la preferencia
 function applyDarkMode(isDark) {
   if (isDark) {
@@ -17,23 +31,17 @@ function applyDarkMode(isDark) {
     document.body.classList.remove('dark-mode');
     toggleDarkModeButton.textContent = 'Modo Oscuro';
   }
+  updateImages(isDark);
 }
 
 // 4) Lógica inicial al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  if (userPref === 'dark') {
-    applyDarkMode(true);
-  } else if (userPref === 'light') {
-    applyDarkMode(false);
-  } else {
-    // Si no hay preferencia del usuario, usa la del sistema
-    applyDarkMode(systemPrefersDark.matches);
-  }
+  const isDark = userPref === 'dark' || (!userPref && systemPrefersDark.matches);
+  applyDarkMode(isDark);
 });
 
 // 5) Escuchar cambios del sistema (si el usuario no ha forzado una preferencia)
 systemPrefersDark.addEventListener('change', (e) => {
-  // Solo se aplica si no hay preferencia manual
   userPref = localStorage.getItem('user-dark-mode');
   if (!userPref) {
     applyDarkMode(e.matches);
@@ -42,11 +50,7 @@ systemPrefersDark.addEventListener('change', (e) => {
 
 // 6) Manejar el clic en el botón
 toggleDarkModeButton.addEventListener('click', () => {
-  // Verificar el estado actual
   const isDark = document.body.classList.contains('dark-mode');
-  // Cambiar al opuesto
   applyDarkMode(!isDark);
-  
-  // Guardar la preferencia del usuario en localStorage
   localStorage.setItem('user-dark-mode', isDark ? 'light' : 'dark');
 });
