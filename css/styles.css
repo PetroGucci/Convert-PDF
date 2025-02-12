@@ -14,6 +14,10 @@ body {
   background-color: #f0f8ff;
   transition: 0.3s;
 }
+.dark-mode .section {
+  background-color: #1e1e1e;
+  border: 2px solid #3a7bd5;
+}
 
 .section h2 {
   margin: auto;
@@ -27,7 +31,14 @@ body {
   color: #004080;
   transition: 0.3s;
 }
-
+#dropZone:hover, #editDropZone:hover {
+  background-color: #e3edff;
+  transition: 0.3s;
+}
+.dark-mode #dropZone:hover, .dark-mode #editDropZone:hover {
+  background-color: #004080;
+  transition: 0.3s;
+}
 img {
   width: 15dvw;
   height: auto;
@@ -35,8 +46,13 @@ img {
 }
   
 .dragover {
-  background-color: #a8c7ff;
+  background-color: #e3edff;
   color: #003366;
+  transition: 0.3s;
+}
+.dark-mode .dragover {
+  background-color: #004080;
+  color: #f0f8ff;
   transition: 0.3s;
 }
 button {
@@ -84,10 +100,7 @@ canvas { display: none; }
   background-color: #121212;
   color: #e0e0e0;
 }
-.dark-mode .section {
-  background-color: #1e1e1e;
-  border-color: #3a7bd5;
-}
+
 .dark-mode #dropZone, .dark-mode #dropZonePdf, .dark-mode #editDropZone {
   border-color: #3a7bd5;
   color: #e0e0e0;
