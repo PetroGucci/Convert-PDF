@@ -9,26 +9,26 @@ body {
   padding: 15px;
   width: 100%;
   max-width: 30dvw;
-  border: 2px solid #0056b3;
+  border: 2px solid #b3003a;
   border-radius: 10px;
-  background-color: #f0f8ff;
+  background-color: #fff0f0;
   transition: 0.3s;
 }
 .dark-mode .section {
-  background-color: #1e1e1e;
-  border: 2px solid #3a7bd5;
+  background-color: #3a0a0a;
+  border: 2px solid #d53a5a;
 }
 
 .section h2 {
   margin: auto;
 }
 #dropZone, #editDropZone {
-  border: 2px dashed #0056b3;
+  border: 2px dashed #b3003a;
   border-radius: 10px;
   padding: 20px;
   margin: 20px auto;
   cursor: pointer;
-  color: #004080;
+  color: #800000;
   transition: 0.3s;
 }
 #dropZone:hover, #editDropZone:hover {
@@ -36,7 +36,7 @@ body {
   transition: 0.3s;
 }
 .dark-mode #dropZone:hover, .dark-mode #editDropZone:hover {
-  background-color: #004080;
+  background-color: #800000;
   transition: 0.3s;
 }
 img {
@@ -47,19 +47,19 @@ img {
   
 .dragover {
   background-color: #e3edff;
-  color: #003366;
+  color: #660000;
   transition: 0.3s;
 }
 .dark-mode .dragover {
-  background-color: #004080;
-  color: #f0f8ff;
+  background-color: #800000;
+  color: #fff0f0;
   transition: 0.3s;
 }
 button {
   margin-top: 10px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #0056b3;
+  background-color: #b3003a;
   color: white;
   border: none;
   border-radius: 5px;
@@ -67,7 +67,7 @@ button {
   transition: 0.3s;
 }
 button:hover {
-  background-color: #004080;
+  background-color: #800000;
   transition: 0.3s;
 }
 canvas { display: none; }
@@ -83,7 +83,7 @@ canvas { display: none; }
 #progressBar {
   width: 0%;
   height: 20px;
-  background-color: #0056b3;
+  background-color: #b3003a;
   border-radius: 10px;
   transition: width 0.3s, background-color 0.3s;
 }
@@ -102,20 +102,20 @@ canvas { display: none; }
 }
 
 .dark-mode #dropZone, .dark-mode #dropZonePdf, .dark-mode #editDropZone {
-  border-color: #3a7bd5;
+  border-color: #d53a5a;
   color: #e0e0e0;
 }
 .dark-mode button {
-  background-color: #3a7bd5;
+  background-color: #a02c3c;
 }
 .dark-mode button:hover {
-  background-color: #2c5aa0;
+  background-color: #a02c3c;
 }
 .dark-mode #progressContainer {
   background-color: #333;
 }
 .dark-mode #progressBar {
-  background-color: #3a7bd5;
+  background-color: #d53a5a;
 }
 
 #editorModal {
@@ -139,12 +139,12 @@ canvas { display: none; }
   width: 90%;
   max-width: 30dvw;
   border-radius: 10px;
-  border: 2px solid #0056b3;
+  border: 2px solid #b3003a;
 }
 .dark-mode #editorContent {
   color: white;
   background: #282828;
-  border: 2px solid #3a7bd5;
+  border: 2px solid #d53a5a;
 }
 
 .cropper-container {
@@ -180,7 +180,7 @@ canvas { display: none; }
 
 /* Botones de cancelar conservan el color rojo */
 #cancelExtract, #cancelPdf, #cancelEditSection, #cancelEdit {
-  background-color: #dc3545;
+  background-color: #E68A3C;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -190,21 +190,21 @@ canvas { display: none; }
 }
 
 #cancelExtract:hover, #cancelPdf:hover, #cancelEditSection:hover, #cancelEdit:hover {
-  background-color: #c82333;
+  background-color: #D67C36;
 }
 
 .dark-mode #cancelExtract, .dark-mode #cancelPdf, .dark-mode #cancelEditSection, .dark-mode #cancelEdit {
-  background-color: #ff4d4d;
+  background-color: #F2A64D;
 }
 
 .dark-mode #cancelExtract:hover, .dark-mode #cancelPdf:hover, .dark-mode #cancelEditSection:hover, .dark-mode #cancelEdit:hover {
-  background-color: #ff1a1a;
+  background-color: #F28C3C;
 }
 h1, h2 {
-  color: #003366; /* Azul oscuro en modo claro */
+  color: #660000; /* Azul oscuro en modo claro */
   transition: color 0.3s;
 }
 
 .dark-mode h1, .dark-mode h2 {
-  color: #f0f8ff; /* Azul claro en modo oscuro */
+  color: #fff0f0; /* Azul claro en modo oscuro */
 }
