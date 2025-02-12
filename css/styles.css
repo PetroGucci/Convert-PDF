@@ -32,7 +32,7 @@ body {
   transition: 0.3s;
 }
 #dropZone:hover, #editDropZone:hover {
-  background-color: #e3edff;
+  background-color: #ffe3e3;
   transition: 0.3s;
 }
 .dark-mode #dropZone:hover, .dark-mode #editDropZone:hover {
@@ -46,7 +46,7 @@ img {
 }
   
 .dragover {
-  background-color: #e3edff;
+  background-color: #ffe3e3;
   color: #660000;
   transition: 0.3s;
 }
