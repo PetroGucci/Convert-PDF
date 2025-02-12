@@ -33,7 +33,7 @@ document.getElementById('applyEdit').addEventListener('click', () => {
   const croppedCanvas = cropper.getCroppedCanvas();
   // Aplica el filtro de escáner al canvas recortado
   applyScanFilterToCanvas(croppedCanvas, croppedCanvas.width, croppedCanvas.height);
-  const editedData = croppedCanvas.toDataURL('image/jpeg', 0.85);
+  const editedData = croppedCanvas.toDataURL('image/jpeg', 1.0); // Calidad máxima
   // Descarga según el tipo de archivo editado
   if (editFileType === "image") {
     const link = document.createElement('a');
@@ -68,25 +68,7 @@ section1.addEventListener('dragover', (e) => {
 section1.addEventListener('dragleave', () => { 
   section1.classList.remove('dragover'); 
 });
-
-// Aquí se procesa el drop en section1 (área ampliada)
-function handleDropEvent(e) {
-  e.preventDefault();
-  section1.classList.remove('dragover');
-  dropZone.classList.remove('dragover');
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    if (files[0].type === 'application/pdf') {
-      dropZone.textContent = `Archivo cargado: ${files[0].name}`;
-      cancelExtractButton.style.display = 'inline-block';
-      extractImagesFromPdf(files[0]);
-    } else if (files[0].type.startsWith('image/')) {
-      processImages(files);
-    } else {
-      alert('Por favor, sube un archivo válido (PDF o imagen).');
-    }
-  }
-}
+// Se usa en section1 para que al soltar el archivo se procese (área ampliada)
 section1.addEventListener('drop', handleDropEvent);
 
 /* ====================================================
@@ -105,24 +87,72 @@ dropZone.addEventListener('dragleave', () => {
 dropZone.addEventListener('click', () => {
   const input = document.createElement('input');
   input.type = 'file';
-  // Se aceptan PDFs e imágenes
   input.accept = 'application/pdf, image/png, image/jpeg';
   input.multiple = true;
   input.click();
   input.addEventListener('change', () => {
     if (input.files.length > 0) {
-      if (input.files[0].type === 'application/pdf') {
-        dropZone.textContent = `Archivo cargado: ${input.files[0].name}`;
-        cancelExtractButton.style.display = 'inline-block';
-        extractImagesFromPdf(input.files[0]);
-      } else if (input.files[0].type.startsWith('image/')) {
-        processImages(input.files);
-      } else {
-        alert('Por favor, selecciona un archivo válido (PDF o imagen).');
-      }
+      // Usamos la misma lógica del drop
+      handleFiles(input.files);
     }
   });
 });
+
+/* ====================================================
+  Variables globales para manejar el estado unificado
+==================================================== */
+let currentUnifiedType = ""; // "pdf" o "images"
+
+/* ====================================================
+  Función para resetear el estado de la zona unificada
+==================================================== */
+function resetUnifiedPDFState() {
+  dropZone.textContent = 'Arrastra y suelta un archivo PDF o imagen aquí o haz clic para seleccionarlos';
+  downloadBtn.style.display = 'none';
+  downloadBtnBN.style.display = 'none';
+  cancelExtractButton.style.display = 'none';
+  generatePdfButton.style.display = 'none';
+  generatePdfBNButton.style.display = 'none';
+  cancelPdfButton.style.display = 'none';
+  progressContainer.style.display = 'none';
+  selectedImages = [];
+  currentUnifiedType = "";
+}
+
+/* ====================================================
+  Función para manejar archivos recibidos (desde drop o input)
+==================================================== */
+function handleFiles(files) {
+  if (files.length === 0) return;
+  const file = files[0];
+  if (file.type === 'application/pdf') {
+    // Si ya había un PDF o imágenes cargadas, se reemplaza
+    if (currentUnifiedType === "pdf" || currentUnifiedType === "images") {
+      resetUnifiedPDFState();
+    }
+    currentUnifiedType = "pdf";
+    dropZone.textContent = `Archivo cargado: ${file.name}`;
+    cancelExtractButton.style.display = 'inline-block';
+    extractImagesFromPdf(file);
+  } else if (file.type.startsWith('image/')) {
+    // Si anteriormente había un PDF, se reemplaza con imágenes
+    if (currentUnifiedType === "pdf") {
+      resetUnifiedPDFState();
+    }
+    // Si ya hay imágenes cargadas, se acumulan (no se reemplazan)
+    processImages(files);
+  } else {
+    alert('Por favor, sube un archivo válido (PDF o imagen).');
+  }
+}
+
+// Usamos handleFiles tanto en el drop de section1 como en dropZone
+function handleDropEvent(e) {
+  e.preventDefault();
+  section1.classList.remove('dragover');
+  dropZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+}
 
 /* ====================================================
   Sección: Extraer imágenes de PDF (ya existente)
@@ -144,14 +174,16 @@ async function extractImagesFromPdf(pdfFile) {
     const pdf = await pdfjsLib.getDocument(pdfData).promise;
     const baseName = pdfFile.name.replace(/\.[^/.]+$/, "");
     const extractedImages = [];
+    // Puedes aumentar el scale para mayor resolución (ej. scale: 3)
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const viewport = page.getViewport({ scale: 2 });
       pdfCanvas.width = viewport.width;
       pdfCanvas.height = viewport.height;
       await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-      const imageData = pdfCanvas.toDataURL('image/jpeg');
-      extractedImages.push({ data: imageData, filename: `${baseName}.jpeg` });
+      // Usa JPEG con calidad 1.0 o PNG para mayor calidad
+      const imageData = pdfCanvas.toDataURL('image/jpeg', 1.0);
+      extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.jpeg` });
       progressBar.style.width = ((i / pdf.numPages) * 100) + '%';
     }
     setTimeout(() => { progressContainer.style.display = 'none'; }, 500);
@@ -170,7 +202,7 @@ async function extractImagesFromPdf(pdfFile) {
       downloadBtn.style.display = 'none';
       downloadBtnBN.style.display = 'none';
       cancelExtractButton.style.display = 'none';
-      dropZone.textContent = 'Arrastra y suelta un archivo PDF o imagen aquí o haz clic para seleccionarlo';
+      dropZone.textContent = 'Arrastra y suelta un archivo PDF o imagen aquí o haz clic para seleccionarlos';
     };
     downloadBtnBN.onclick = async function() {
       const zip = new JSZip();
@@ -186,7 +218,7 @@ async function extractImagesFromPdf(pdfFile) {
       downloadBtn.style.display = 'none';
       downloadBtnBN.style.display = 'none';
       cancelExtractButton.style.display = 'none';
-      dropZone.textContent = 'Arrastra y suelta un archivo PDF o imagen aquí o haz clic para seleccionarlo';
+      dropZone.textContent = 'Arrastra y suelta un archivo PDF o imagen aquí o haz clic para seleccionarlos';
     };
   };
   fileReader.readAsArrayBuffer(pdfFile);
@@ -198,6 +230,7 @@ cancelExtractButton.addEventListener('click', () => {
   downloadBtnBN.style.display = 'none';
   cancelExtractButton.style.display = 'none';
   progressContainer.style.display = 'none';
+  currentUnifiedType = "";
 });
 
 /* ====================================================
@@ -238,7 +271,7 @@ function convertDataURLWithScanFilter(dataURL) {
         data[i] = data[i + 1] = data[i + 2] = gray;
       }
       ctx.putImageData(imageData, 0, 0);
-      resolve(canvas.toDataURL('image/jpeg', 0.85));
+      resolve(canvas.toDataURL('image/jpeg', 1.0));
     };
     img.onerror = reject;
     img.src = dataURL;
@@ -276,9 +309,17 @@ generatePdfBNButton.style.display = 'none';
 cancelPdfButton.style.display = 'none';
 
 function processImages(files) {
-  selectedImages = Array.from(files).filter(file =>
+  const newImages = Array.from(files).filter(file =>
     file.type === 'image/png' || file.type === 'image/jpeg'
   );
+  if (currentUnifiedType !== "images") {
+    // Si no hay imágenes ya cargadas, se reemplaza (o se limpió un PDF previo)
+    selectedImages = newImages;
+    currentUnifiedType = "images";
+  } else {
+    // Si ya hay imágenes, se acumulan
+    selectedImages = selectedImages.concat(newImages);
+  }
   if (selectedImages.length > 0) {
     dropZone.textContent = `${selectedImages.length} imágenes cargadas`;
     generatePdfButton.style.display = 'inline-block';
@@ -330,7 +371,7 @@ generatePdfBNButton.addEventListener('click', async () => {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, width, height);
     applyScanFilterToCanvas(canvas, width, height);
-    const filteredImgData = canvas.toDataURL('image/jpeg', 0.85);
+    const filteredImgData = canvas.toDataURL('image/jpeg', 1.0);
     if (i === 0) {
       pdf = new jsPDF({
         orientation: width > height ? 'landscape' : 'portrait',
@@ -353,6 +394,7 @@ cancelPdfButton.addEventListener('click', () => {
   generatePdfButton.style.display = 'none';
   generatePdfBNButton.style.display = 'none';
   cancelPdfButton.style.display = 'none';
+  currentUnifiedType = "";
 });
 
 /* ====================================================
@@ -390,6 +432,7 @@ function handleEditFile(file) {
   cancelEditSectionButton.style.display = 'inline-block';
   openEditorButton.style.display = 'inline-block';
   downloadEditedButton.style.display = 'inline-block';
+  // En edición, siempre se reemplaza la entrada (ya sea imagen o PDF)
   if (file.type.startsWith('image/')) {
     editFileType = "image";
     editOriginalMime = file.type;
