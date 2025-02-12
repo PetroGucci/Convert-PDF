@@ -69,11 +69,9 @@
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
 
-    dropZonePdf.addEventListener('dragover', (e) => { e.preventDefault(); dropZonePdf.classList.add('dragover'); });
-    dropZonePdf.addEventListener('dragleave', () => { dropZonePdf.classList.remove('dragover'); });
-    dropZonePdf.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZonePdf.classList.remove('dragover');
+    section1.addEventListener('dragover', (e) => { e.preventDefault(); section1.classList.add('dragover'); });
+    section1.addEventListener('dragleave', () => { section1.classList.remove('dragover'); });
+    section1.addEventListener('drop', (e) => {e.preventDefault();section1.classList.remove('dragover');
       const files = e.dataTransfer.files;
       if(files.length > 0 && files[0].type === 'application/pdf') {
         const file = files[0];
@@ -247,13 +245,9 @@ function loadImage(dataURL) {
     generatePdfBNButton.style.display = 'none';
     cancelPdfButton.style.display = 'none';
 
-    dropZoneConv.addEventListener('dragover', (e) => { e.preventDefault(); dropZoneConv.classList.add('dragover'); });
-    dropZoneConv.addEventListener('dragleave', () => { dropZoneConv.classList.remove('dragover'); });
-    dropZoneConv.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZoneConv.classList.remove('dragover');
-      processImages(e.dataTransfer.files);
-    });
+    section1.addEventListener('dragover', (e) => { e.preventDefault(); section1.classList.add('dragover'); });
+    section1.addEventListener('dragleave', () => { section1.classList.remove('dragover'); });
+    section1.addEventListener('drop', (e) => {e.preventDefault();section1.classList.remove('dragover');processImages(e.dataTransfer.files); });
     dropZoneConv.addEventListener('click', () => {
       const input = document.createElement('input');
       input.type = 'file';
@@ -375,9 +369,9 @@ function loadImage(dataURL) {
     let editOriginalData = "";
     let editOriginalMime = "";
 
-    editDropZone.addEventListener('dragover', (e) => { e.preventDefault(); editDropZone.classList.add('dragover'); });
-    editDropZone.addEventListener('dragleave', () => { editDropZone.classList.remove('dragover'); });
-    editDropZone.addEventListener('drop', (e) => { e.preventDefault(); editDropZone.classList.remove('dragover'); handleEditFile(e.dataTransfer.files[0]); });
+    editSection.addEventListener('dragover', (e) => { e.preventDefault(); editSection.classList.add('dragover'); });
+    editSection.addEventListener('dragleave', () => { editSection.classList.remove('dragover'); });
+    editSection.addEventListener('drop', (e) => { e.preventDefault(); editSection.classList.remove('dragover'); handleEditFile(e.dataTransfer.files[0]); });
     editDropZone.addEventListener('click', () => {
       const input = document.createElement('input');
       input.type = 'file';
