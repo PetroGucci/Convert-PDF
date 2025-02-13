@@ -10,15 +10,15 @@ const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
 // Función para actualizar las imágenes según el modo
 function updateImages(isDark) {
-  const convertImage = document.getElementById('convertImage');
-  const editorImage = document.getElementById('editorImage');
+  const convertImageLogo = document.getElementById('convertImageLogo');
+  const editorImagelogo = document.getElementById('editorImagelogo');
 
-  if (convertImage) {
-    convertImage.src = isDark ? './img/convert_dark.png' : './img/convert_light.png'; 
+  if (convertImageLogo) {
+    convertImageLogo.src = isDark ? './img/convert_dark.png' : './img/convert_light.png'; 
   }
 
-  if (editorImage) {
-    editorImage.src = isDark ? './img/editor_dark.png' : './img/editor_light.png';
+  if (editorImagelogo) {
+    editorImagelogo.src = isDark ? './img/editor_dark.png' : './img/editor_light.png';
   }
 }
 
