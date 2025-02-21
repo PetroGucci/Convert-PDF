@@ -202,7 +202,7 @@ async function extractImagesFromPdf(pdfFile) {
       pdfCanvas.height = viewport.height;
       await page.render({ canvasContext: ctx, viewport: viewport }).promise;
       // Usa JPEG con calidad 1.0 o PNG para mayor calidad
-      const imageData = pdfCanvas.toDataURL('image/jpeg', .95);
+      const imageData = pdfCanvas.toDataURL('image/jpeg', 0.95);
       extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.jpeg` });
       progressBar.style.width = ((i / pdf.numPages) * 100) + '%';
     }
