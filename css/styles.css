@@ -208,3 +208,55 @@ h1, h2 {
 .dark-mode h1, .dark-mode h2 {
   color: #fff0f0; /* Azul claro en modo oscuro */
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* Reducir el margen superior */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%; /* Aumentar el ancho del modal */
+  max-width: 90dvw; /* Aumentar el ancho máximo del modal */
+  border-radius: 10px;
+}
+
+.dark-mode .modal-content {
+  background-color: #282828;
+  border: 2px solid #d53a5a;
+  color: white;
+}
+
+.modal img {
+  max-width: 90%;
+  max-height: 90%;
+  margin: auto;
+  display: block;
+}
+
+.sortable-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sortable-container img {
+  width: 150px; /* Aumentar el tamaño de las imágenes */
+  height: auto;
+  margin: 10px;
+  cursor: move;
+}
+
+.sortable-ghost {
+  opacity: 0.4;
+}

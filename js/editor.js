@@ -333,11 +333,9 @@ function processImages(files) {
     file.type === 'image/png' || file.type === 'image/jpeg'
   );
   if (currentUnifiedType !== "images") {
-    // Si no hay imágenes ya cargadas, se reemplaza (o se limpió un PDF previo)
     selectedImages = newImages;
     currentUnifiedType = "images";
   } else {
-    // Si ya hay imágenes, se acumulan (manteniendo el orden)
     selectedImages = selectedImages.concat(newImages);
   }
   if (selectedImages.length > 0) {
@@ -345,6 +343,7 @@ function processImages(files) {
     generatePdfButton.style.display = 'inline-block';
     generatePdfBNButton.style.display = 'inline-block';
     cancelPdfButton.style.display = 'inline-block';
+    sortImagesButton.style.display = 'inline-block';
   }
 }
 
@@ -510,3 +509,55 @@ function handleEditFile(file) {
     editFileType = "";
   });
 }
+
+/* ====================================================
+  SECCIÓN: Ordenar imágenes
+==================================================== */
+const sortImagesButton = document.getElementById('sortImages');
+const sortModal = document.getElementById('sortModal');
+const sortableImages = document.getElementById('sortableImages');
+const applySortButton = document.getElementById('applySort');
+const cancelSortButton = document.getElementById('cancelSort');
+const previewModal = document.createElement('div');
+const previewImage = document.createElement('img');
+
+previewModal.classList.add('modal');
+previewModal.style.display = 'none';
+previewModal.appendChild(previewImage);
+document.body.appendChild(previewModal);
+
+previewModal.addEventListener('click', () => {
+  previewModal.style.display = 'none';
+});
+
+sortImagesButton.addEventListener('click', () => {
+  sortableImages.innerHTML = '';
+  selectedImages.forEach((file, index) => {
+    const imgElement = document.createElement('img');
+    imgElement.src = URL.createObjectURL(file);
+    imgElement.dataset.index = index;
+    imgElement.addEventListener('click', () => {
+      previewImage.src = imgElement.src;
+      previewModal.style.display = 'flex';
+    });
+    sortableImages.appendChild(imgElement);
+  });
+  sortModal.style.display = 'block';
+  new Sortable(sortableImages, {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+  });
+});
+
+applySortButton.addEventListener('click', () => {
+  const sortedImages = [];
+  sortableImages.querySelectorAll('img').forEach(img => {
+    sortedImages.push(selectedImages[img.dataset.index]);
+  });
+  selectedImages = sortedImages;
+  sortModal.style.display = 'none';
+});
+
+cancelSortButton.addEventListener('click', () => {
+  sortModal.style.display = 'none';
+});
