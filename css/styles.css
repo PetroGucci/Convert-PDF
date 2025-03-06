@@ -179,7 +179,7 @@ canvas { display: none; }
 }
 
 /* Botones de cancelar conservan el color rojo */
-#cancelExtract, #cancelPdf, #cancelEditSection, #cancelEdit {
+#cancelExtract, #cancelPdf, #cancelEditSection, #cancelEdit, #cancelSort{
   background-color: #E68A3C;
   color: white;
   border: none;
@@ -189,15 +189,15 @@ canvas { display: none; }
   transition: 0.3s;
 }
 
-#cancelExtract:hover, #cancelPdf:hover, #cancelEditSection:hover, #cancelEdit:hover {
+#cancelExtract:hover, #cancelPdf:hover, #cancelEditSection:hover, #cancelEdit:hover ,#cancelSort:hover{
   background-color: #D67C36;
 }
 
-.dark-mode #cancelExtract, .dark-mode #cancelPdf, .dark-mode #cancelEditSection, .dark-mode #cancelEdit {
+.dark-mode #cancelExtract, .dark-mode #cancelPdf, .dark-mode #cancelEditSection, .dark-mode #cancelEdit, .dark-mode #cancelSort{
   background-color: #F2A64D;
 }
 
-.dark-mode #cancelExtract:hover, .dark-mode #cancelPdf:hover, .dark-mode #cancelEditSection:hover, .dark-mode #cancelEdit:hover {
+.dark-mode #cancelExtract:hover, .dark-mode #cancelPdf:hover, .dark-mode #cancelEditSection:hover, .dark-mode #cancelEdit:hover ,.dark-mode #cancelSort:hover{
   background-color: #F28C3C;
 }
 h1, h2 {
@@ -223,12 +223,15 @@ h1, h2 {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto; /* Reducir el margen superior */
+  margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 90%; /* Aumentar el ancho del modal */
-  max-width: 90dvw; /* Aumentar el ancho máximo del modal */
+  width: 90%; /* Ajustar el ancho automáticamente */
+  max-width: 60dvw; /* Aumentar el ancho máximo del modal */
+  height: 75%; /* Ajustar la altura automáticamente */
+  max-height: 100dvh; /* Aumentar la altura máxima del modal */
   border-radius: 10px;
+  overflow: auto; /* Permitir el desplazamiento si el contenido es demasiado grande */
 }
 
 .dark-mode .modal-content {
@@ -242,19 +245,33 @@ h1, h2 {
   max-height: 90%;
   margin: auto;
   display: block;
+  border: 2px solid #b3003a; /* Agregar borde a la vista previa */
+  border-radius: 5px;
+}
+
+.dark-mode .modal img {
+  border: 2px solid #d53a5a; /* Borde en modo oscuro */
 }
 
 .sortable-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  max-height: 80dvh; /* Limitar la altura del contenedor */
+  overflow-y: auto; /* Permitir el desplazamiento vertical */
 }
 
 .sortable-container img {
-  width: 150px; /* Aumentar el tamaño de las imágenes */
+  width: 200px; /* Aumentar el tamaño de las imágenes */
   height: auto;
   margin: 10px;
   cursor: move;
+  border: 2px solid #b3003a; /* Agregar borde a las imágenes */
+  border-radius: 5px;
+}
+
+.dark-mode .sortable-container img {
+  border: 2px solid #d53a5a; /* Borde en modo oscuro */
 }
 
 .sortable-ghost {
