@@ -547,10 +547,19 @@ sortImagesButton.addEventListener('click', () => {
     fileNameElement.classList.add('file-name');
     fileNameElement.textContent = file.name;
 
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.textContent = '×';
+    deleteButton.addEventListener('click', () => {
+      selectedImages.splice(index, 1);
+      sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
+    });
+
     const sortableItem = document.createElement('div');
     sortableItem.classList.add('sortable-item');
     sortableItem.appendChild(imgElement);
     sortableItem.appendChild(fileNameElement);
+    sortableItem.appendChild(deleteButton);
 
     sortableImages.appendChild(sortableItem);
   });
@@ -589,4 +598,21 @@ addMoreImagesButton.addEventListener('click', () => {
       sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
     }
   });
+});
+
+addMoreImagesButton.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  addMoreImagesButton.classList.add('dragover');
+});
+
+addMoreImagesButton.addEventListener('dragleave', () => {
+  addMoreImagesButton.classList.remove('dragover');
+});
+
+addMoreImagesButton.addEventListener('drop', (e) => {
+  e.preventDefault();
+  addMoreImagesButton.classList.remove('dragover');
+  const files = getFilesFromDataTransfer(e);
+  processImages(files);
+  sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
 });

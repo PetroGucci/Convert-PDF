@@ -263,6 +263,7 @@ h1, h2 {
 }
 
 .sortable-container .sortable-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -317,4 +318,43 @@ h1, h2 {
 .dark-mode #addMoreImages {
   border: 2px dashed #d53a5a;
   color: #d53a5a;
+}
+
+#addMoreImages.dragover {
+  background-color: #ffe3e3;
+  color: #660000;
+}
+
+.dark-mode #addMoreImages.dragover {
+  background-color: #800000;
+  color: #fff0f0;
+}
+
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #b3003a;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 25px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #800000;
+}
+
+.dark-mode .delete-button {
+  background-color: #d53a5a;
+}
+
+.dark-mode .delete-button:hover {
+  background-color: #a02c3c;
 }
