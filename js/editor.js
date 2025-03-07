@@ -515,6 +515,11 @@ const sortModal = document.getElementById('sortModal');
 const sortableImages = document.getElementById('sortableImages');
 const applySortButton = document.getElementById('applySort');
 const cancelSortButton = document.getElementById('cancelSort');
+const addMoreImagesButton = document.createElement('div');
+addMoreImagesButton.id = 'addMoreImages';
+addMoreImagesButton.textContent = 'Agregar más imágenes';
+sortableImages.appendChild(addMoreImagesButton);
+
 const previewModal = document.createElement('div');
 const previewImage = document.createElement('img');
 
@@ -537,8 +542,21 @@ sortImagesButton.addEventListener('click', () => {
       previewImage.src = imgElement.src;
       previewModal.style.display = 'flex';
     });
-    sortableImages.appendChild(imgElement);
+
+    const fileNameElement = document.createElement('div');
+    fileNameElement.classList.add('file-name');
+    fileNameElement.textContent = file.name;
+
+    const sortableItem = document.createElement('div');
+    sortableItem.classList.add('sortable-item');
+    sortableItem.appendChild(imgElement);
+    sortableItem.appendChild(fileNameElement);
+
+    sortableImages.appendChild(sortableItem);
   });
+
+  sortableImages.appendChild(addMoreImagesButton); // Asegurarse de que el botón esté al final
+
   sortModal.style.display = 'block';
   new Sortable(sortableImages, {
     animation: 150,
@@ -557,4 +575,18 @@ applySortButton.addEventListener('click', () => {
 
 cancelSortButton.addEventListener('click', () => {
   sortModal.style.display = 'none';
+});
+
+addMoreImagesButton.addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/png, image/jpeg';
+  input.multiple = true;
+  input.click();
+  input.addEventListener('change', () => {
+    if (input.files.length > 0) {
+      processImages(Array.from(input.files));
+      sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
+    }
+  });
 });

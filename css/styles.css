@@ -223,15 +223,15 @@ h1, h2 {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto;
+  margin: 2% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 90%; /* Ajustar el ancho automáticamente */
-  max-width: 40dvw; /* Aumentar el ancho máximo del modal */
-  height: 70%; /* Ajustar la altura automáticamente */
-  max-height: 100dvh; /* Aumentar la altura máxima del modal */
+  max-width: 90dvw; /* Aumentar el ancho máximo del modal */
+  height: 85%; /* Ajustar la altura automáticamente */
+  max-height: 85dvh; /* Aumentar la altura máxima del modal */
   border-radius: 10px;
-  overflow: auto; /* Permitir el desplazamiento si el contenido es demasiado grande */
+  overflow: hidden; /* Evitar el desplazamiento */
 }
 
 .dark-mode .modal-content {
@@ -257,23 +257,64 @@ h1, h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-height: 80dvh; /* Limitar la altura del contenedor */
+  align-items: flex-start;
+  max-height: 75dvh; /* Limitar la altura del contenedor */
   overflow-y: auto; /* Permitir el desplazamiento vertical */
+}
+
+.sortable-container .sortable-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
 }
 
 .sortable-container img {
   width: 200px; /* Aumentar el tamaño de las imágenes */
   height: auto;
-  margin: 10px;
   cursor: move;
   border: 2px solid #b3003a; /* Agregar borde a las imágenes */
   border-radius: 5px;
+}
+
+.sortable-container .file-name {
+  max-width: 200px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 5px;
+  color: #660000;
 }
 
 .dark-mode .sortable-container img {
   border: 2px solid #d53a5a; /* Borde en modo oscuro */
 }
 
+.dark-mode .sortable-container .file-name {
+  color: #fff0f0;
+}
+
 .sortable-ghost {
   opacity: 0.4;
+}
+
+#addMoreImages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  border: 2px dashed #b3003a;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #b3003a;
+  font-size: 16px;
+  text-align: center;
+  margin: 10px;
+}
+
+.dark-mode #addMoreImages {
+  border: 2px dashed #d53a5a;
+  color: #d53a5a;
 }
