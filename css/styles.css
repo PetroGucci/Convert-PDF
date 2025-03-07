@@ -227,8 +227,8 @@ h1, h2 {
   padding: 20px;
   border: 1px solid #888;
   width: 90%; /* Ajustar el ancho automáticamente */
-  max-width: 60dvw; /* Aumentar el ancho máximo del modal */
-  height: 75%; /* Ajustar la altura automáticamente */
+  max-width: 40dvw; /* Aumentar el ancho máximo del modal */
+  height: 70%; /* Ajustar la altura automáticamente */
   max-height: 100dvh; /* Aumentar la altura máxima del modal */
   border-radius: 10px;
   overflow: auto; /* Permitir el desplazamiento si el contenido es demasiado grande */

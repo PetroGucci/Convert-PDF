@@ -114,6 +114,7 @@ function resetUnifiedPDFState() {
   generatePdfButton.style.display = 'none';
   generatePdfBNButton.style.display = 'none';
   cancelPdfButton.style.display = 'none';
+  sortImagesButton.style.display = 'none'; // Ocultar el botón "Ordenar Imágenes"
   progressContainer.style.display = 'none';
   selectedImages = [];
   currentUnifiedType = "";
@@ -351,7 +352,6 @@ generatePdfButton.addEventListener('click', async () => {
   if (selectedImages.length === 0) return;
   const { jsPDF } = window.jspdf;
   let pdf = null;
-  // Se recorre selectedImages en el orden en que fueron agregadas
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
@@ -372,8 +372,7 @@ generatePdfButton.addEventListener('click', async () => {
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   }
-  // Reiniciamos el estado, sin importar la cantidad de imágenes
-  resetUnifiedPDFState();
+  resetUnifiedPDFState(); // Reiniciar el estado
 });
 
 generatePdfBNButton.addEventListener('click', async () => {
@@ -386,7 +385,6 @@ generatePdfBNButton.addEventListener('click', async () => {
     const img = await loadImage(imgData);
     const width = img.width;
     const height = img.height;
-    // Crear un canvas para aplicar el filtro escáner
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -408,12 +406,11 @@ generatePdfBNButton.addEventListener('click', async () => {
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   }
-  // Reiniciamos el estado
-  resetUnifiedPDFState();
+  resetUnifiedPDFState(); // Reiniciar el estado
 });
 
 cancelPdfButton.addEventListener('click', () => {
-  resetUnifiedPDFState();
+  resetUnifiedPDFState(); // Reiniciar el estado
 });
 
 /* ====================================================
