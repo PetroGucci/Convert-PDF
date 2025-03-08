@@ -225,7 +225,7 @@ h1, h2 {
   background-color: #fefefe;
   margin: 2% auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 2px solid #b3003a;
   width: 90%; /* Ajustar el ancho automáticamente */
   max-width: 90dvw; /* Aumentar el ancho máximo del modal */
   height: 85%; /* Ajustar la altura automáticamente */
@@ -331,19 +331,20 @@ h1, h2 {
 }
 
 .delete-button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+  width: 15px; /* Tamaño reducido */
+  height: 15px; /* Casi cuadrado */
+  position: absolute; /* Posicionamiento absoluto */
+  top: 0; /* Esquina superior */
+  right: 0; /* Esquina derecha */
+  display: flex; /* Para centrar el contenido */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  font-size: 12px; /* Tamaño de la "X" */
+  border-radius: 3px; /* Bordes ligeramente redondeados */
   background-color: #b3003a;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
   cursor: pointer;
-  font-size: 16px;
-  line-height: 25px;
-  text-align: center;
   transition: 0.3s;
 }
 
