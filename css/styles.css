@@ -232,6 +232,20 @@ h1, h2 {
   max-height: 85dvh; /* Aumentar la altura máxima del modal */
   border-radius: 10px;
   overflow: hidden; /* Evitar el desplazamiento */
+  padding-top: 20px; /* Reducir el espacio superior */
+  position: relative; /* Asegurar que los botones estén dentro del cuadro */
+}
+
+#applySort {
+  right: 25px; /* Ajustar la posición del botón "Aplicar Orden" */
+}
+
+#cancelSort {
+  left: 25px; /* Ajustar la posición izquierda */
+}
+
+#sortableImages {
+  margin-top: 60px; /* Mover las imágenes un poco hacia arriba */
 }
 
 .dark-mode .modal-content {
