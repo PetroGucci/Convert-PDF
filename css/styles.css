@@ -287,7 +287,7 @@ h1, h2 {
 .sortable-container img {
   width: 200px; /* Aumentar el tamaño de las imágenes */
   height: auto;
-  cursor: move;
+  cursor: default;
   border: 2px solid #b3003a; /* Agregar borde a las imágenes */
   border-radius: 5px;
 }
@@ -345,11 +345,13 @@ h1, h2 {
 }
 
 .delete-button {
+  margin-top: 0px; /* Ajustar el espacio superior */
+  padding: 10px 10px; /* Ajustar el tamaño del botón */
   width: 15px; /* Tamaño reducido */
   height: 15px; /* Casi cuadrado */
   position: absolute; /* Posicionamiento absoluto */
   top: 0; /* Esquina superior */
-  right: 0; /* Esquina derecha */
+  right: 8px; /* Esquina derecha */
   display: flex; /* Para centrar el contenido */
   align-items: center; /* Centrar verticalmente */
   justify-content: center; /* Centrar horizontalmente */
