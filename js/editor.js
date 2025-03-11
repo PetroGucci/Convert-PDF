@@ -356,8 +356,14 @@ generatePdfButton.addEventListener('click', async () => {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width;
-    const height = img.height;
+    const width = img.width * 0.95; // Reducir el tamaño al 50%
+    const height = img.height * 0.95; // Reducir el tamaño al 50%
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+    const compressedImgData = canvas.toDataURL('image/jpeg', 0.95); // Reducir la calidad al 50%
     if (i === 0) {
       pdf = new jsPDF({
         orientation: width > height ? 'landscape' : 'portrait',
@@ -367,7 +373,7 @@ generatePdfButton.addEventListener('click', async () => {
     } else {
       pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
     }
-    pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(compressedImgData, 'JPEG', 0, 0, width, height);
   }
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
@@ -383,15 +389,15 @@ generatePdfBNButton.addEventListener('click', async () => {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width;
-    const height = img.height;
+    const width = img.width * 0.95; // Reducir el tamaño al 50%
+    const height = img.height * 0.95; // Reducir el tamaño al 50%
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, width, height);
     applyScanFilterToCanvas(canvas, width, height);
-    const filteredImgData = canvas.toDataURL('image/jpeg', 1.0);
+    const compressedImgData = canvas.toDataURL('image/jpeg', 0.95); // Reducir la calidad al 50%
     if (i === 0) {
       pdf = new jsPDF({
         orientation: width > height ? 'landscape' : 'portrait',
@@ -401,7 +407,7 @@ generatePdfBNButton.addEventListener('click', async () => {
     } else {
       pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
     }
-    pdf.addImage(filteredImgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(compressedImgData, 'JPEG', 0, 0, width, height);
   }
   if (pdf) {
     pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
