@@ -333,6 +333,7 @@ async function updateSortableImagesPreview() {
   sortableImages.innerHTML = '';
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
+  const canvasResolution = 3; // Aumentar resolución del lienzo
 
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
@@ -340,8 +341,9 @@ async function updateSortableImagesPreview() {
     const img = await loadImage(imgData);
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = pageWidth;
-    canvas.height = pageHeight;
+    canvas.width = pageWidth * canvasResolution;
+    canvas.height = pageHeight * canvasResolution;
+    ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -350,7 +352,7 @@ async function updateSortableImagesPreview() {
     const y = (pageHeight - img.height * scale) / 2;
     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-    const previewData = canvas.toDataURL('image/jpeg', 1.0);
+    const previewData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad
 
     const imgElement = document.createElement('img');
     imgElement.src = previewData;
@@ -408,6 +410,7 @@ generatePdfButton.addEventListener('click', async () => {
   const { jsPDF } = window.jspdf;
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
+  const canvasResolution = 3; // Aumentar resolución del lienzo
   let pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
@@ -420,8 +423,9 @@ generatePdfButton.addEventListener('click', async () => {
     const img = await loadImage(imgData);
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = pageWidth;
-    canvas.height = pageHeight;
+    canvas.width = pageWidth * canvasResolution;
+    canvas.height = pageHeight * canvasResolution;
+    ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -430,47 +434,55 @@ generatePdfButton.addEventListener('click', async () => {
     const y = (pageHeight - img.height * scale) / 2;
     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-    const finalImgData = canvas.toDataURL('image/jpeg', 1.0);
+    const finalImgData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad
     if (i > 0) {
       pdf.addPage([pageWidth, pageHeight]);
     }
     pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight);
   }
-  pdf.save('documento.pdf');
+  pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   resetUnifiedPDFState(); // Reiniciar el estado
 });
 
 generatePdfBNButton.addEventListener('click', async () => {
   if (selectedImages.length === 0) return;
   const { jsPDF } = window.jspdf;
-  let pdf = null;
+  const pageWidth = 595; // Ancho de página A4 en puntos
+  const pageHeight = 842; // Altura de página A4 en puntos
+  const canvasResolution = 3; // Aumentar resolución del lienzo
+  let pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: [pageWidth, pageHeight],
+  });
+
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width;
-    const height = img.height;
     const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = pageWidth * canvasResolution;
+    canvas.height = pageHeight * canvasResolution;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, width, height);
-    applyScanFilterToCanvas(canvas, width, height);
-    const filteredImgData = canvas.toDataURL('image/jpeg', 1.0);
-    if (i === 0) {
-      pdf = new jsPDF({
-        orientation: width > height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [width, height],
-      });
-    } else {
-      pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
+    ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
+    const x = (pageWidth - img.width * scale) / 2;
+    const y = (pageHeight - img.height * scale) / 2;
+    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+    // Aplicar filtro escáner
+    applyScanFilterToCanvas(canvas, canvas.width, canvas.height);
+
+    const filteredImgData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad
+    if (i > 0) {
+      pdf.addPage([pageWidth, pageHeight]);
     }
-    pdf.addImage(filteredImgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(filteredImgData, 'JPEG', 0, 0, pageWidth, pageHeight);
   }
-  if (pdf) {
-    pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
-  }
+  pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   resetUnifiedPDFState(); // Reiniciar el estado
 });
 
