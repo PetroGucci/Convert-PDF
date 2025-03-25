@@ -345,7 +345,7 @@ async function updateSortableImagesPreview() {
     canvas.height = pageHeight * canvasResolution;
     ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
     ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, pageWidth, pageHeight);
     
     const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
     const x = (pageWidth - img.width * scale) / 2;
@@ -418,7 +418,7 @@ generatePdfButton.addEventListener('click', async () => {
     unit: 'pt',
     format: [pageWidth, pageHeight],
   });
-
+  
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
