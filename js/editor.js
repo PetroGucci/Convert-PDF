@@ -203,7 +203,7 @@ async function extractImagesFromPdf(pdfFile) {
       pdfCanvas.height = viewport.height;
       await page.render({ canvasContext: ctx, viewport: viewport }).promise;
       // Usa JPEG con calidad 1.0 o PNG para mayor calidad
-      const imageData = pdfCanvas.toDataURL('image/jpeg', 0.95);
+      const imageData = pdfCanvas.toDataURL('image/jpeg', 1.0);
       extractedImages.push({ data: imageData, filename: `${baseName}-pagina-${i}.jpeg` });
       progressBar.style.width = ((i / pdf.numPages) * 100) + '%';
     }
@@ -329,6 +329,62 @@ generatePdfButton.style.display = 'none';
 generatePdfBNButton.style.display = 'none';
 cancelPdfButton.style.display = 'none';
 
+async function updateSortableImagesPreview() {
+  sortableImages.innerHTML = '';
+  const pageWidth = 595; // Ancho de página A4 en puntos
+  const pageHeight = 842; // Altura de página A4 en puntos
+  const canvasResolution = 3; // Aumentar resolución del lienzo
+
+  for (let i = 0; i < selectedImages.length; i++) {
+    const file = selectedImages[i];
+    const imgData = await readImageAsDataURL(file);
+    const img = await loadImage(imgData);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = pageWidth * canvasResolution;
+    canvas.height = pageHeight * canvasResolution;
+    ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
+    const x = (pageWidth - img.width * scale) / 2;
+    const y = (pageHeight - img.height * scale) / 2;
+    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+    const previewData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad
+
+    const imgElement = document.createElement('img');
+    imgElement.src = previewData;
+    imgElement.dataset.index = i;
+    imgElement.addEventListener('click', () => {
+      previewImage.src = imgElement.src;
+      previewModal.style.display = 'flex';
+    });
+
+    const fileNameElement = document.createElement('div');
+    fileNameElement.classList.add('file-name');
+    fileNameElement.textContent = file.name;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.textContent = '×';
+    deleteButton.addEventListener('click', () => {
+      selectedImages.splice(i, 1);
+      updateSortableImagesPreview(); // Actualizar la vista previa
+    });
+
+    const sortableItem = document.createElement('div');
+    sortableItem.classList.add('sortable-item');
+    sortableItem.appendChild(imgElement);
+    sortableItem.appendChild(fileNameElement);
+    sortableItem.appendChild(deleteButton);
+
+    sortableImages.appendChild(sortableItem);
+  }
+  sortableImages.appendChild(addMoreImagesButton); // Asegurarse de que el botón esté al final
+}
+
 function processImages(files) {
   const newImages = Array.from(files).filter(file =>
     file.type === 'image/png' || file.type === 'image/jpeg'
@@ -345,25 +401,28 @@ function processImages(files) {
     generatePdfBNButton.style.display = 'inline-block';
     cancelPdfButton.style.display = 'inline-block';
     sortImagesButton.style.display = 'inline-block';
+    updateSortableImagesPreview(); // Actualizar la vista previa
   }
 }
 
 generatePdfButton.addEventListener('click', async () => {
   if (selectedImages.length === 0) return;
   const { jsPDF } = window.jspdf;
-  let pdf = null;
+  const pageWidth = 595; // Ancho de página A4 en puntos
+  const pageHeight = 842; // Altura de página A4 en puntos
+  const canvasResolution = 3; // Aumentar resolución del lienzo
+  let pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: [pageWidth, pageHeight],
+  });
+
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width * 0.95; // Reducir el tamaño al 50%
-    const height = img.height * 0.95; // Reducir el tamaño al 50%
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, width, height);
-    const compressedImgData = canvas.toDataURL('image/jpeg', 0.95); // Reducir la calidad al 50%
+    const width = img.width;
+    const height = img.height;
     if (i === 0) {
       pdf = new jsPDF({
         orientation: width > height ? 'landscape' : 'portrait',
@@ -373,31 +432,37 @@ generatePdfButton.addEventListener('click', async () => {
     } else {
       pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
     }
-    pdf.addImage(compressedImgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
   }
-  if (pdf) {
-    pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
-  }
+  pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   resetUnifiedPDFState(); // Reiniciar el estado
 });
 
 generatePdfBNButton.addEventListener('click', async () => {
   if (selectedImages.length === 0) return;
   const { jsPDF } = window.jspdf;
-  let pdf = null;
+  const pageWidth = 595; // Ancho de página A4 en puntos
+  const pageHeight = 842; // Altura de página A4 en puntos
+  const canvasResolution = 3; // Aumentar resolución del lienzo
+  let pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: [pageWidth, pageHeight],
+  });
+
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width * 0.95; // Reducir el tamaño al 50%
-    const height = img.height * 0.95; // Reducir el tamaño al 50%
+    const width = img.width;
+    const height = img.height;
     const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = pageWidth * canvasResolution;
+    canvas.height = pageHeight * canvasResolution;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, width, height);
     applyScanFilterToCanvas(canvas, width, height);
-    const compressedImgData = canvas.toDataURL('image/jpeg', 0.95); // Reducir la calidad al 50%
+    const filteredImgData = canvas.toDataURL('image/jpeg', 1.0);
     if (i === 0) {
       pdf = new jsPDF({
         orientation: width > height ? 'landscape' : 'portrait',
@@ -407,11 +472,9 @@ generatePdfBNButton.addEventListener('click', async () => {
     } else {
       pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
     }
-    pdf.addImage(compressedImgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(filteredImgData, 'JPEG', 0, 0, width, height);
   }
-  if (pdf) {
-    pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
-  }
+  pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   resetUnifiedPDFState(); // Reiniciar el estado
 });
 
@@ -539,39 +602,7 @@ previewModal.addEventListener('click', () => {
 });
 
 sortImagesButton.addEventListener('click', () => {
-  sortableImages.innerHTML = '';
-  selectedImages.forEach((file, index) => {
-    const imgElement = document.createElement('img');
-    imgElement.src = URL.createObjectURL(file);
-    imgElement.dataset.index = index;
-    imgElement.addEventListener('click', () => {
-      previewImage.src = imgElement.src;
-      previewModal.style.display = 'flex';
-    });
-
-    const fileNameElement = document.createElement('div');
-    fileNameElement.classList.add('file-name');
-    fileNameElement.textContent = file.name;
-
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('delete-button');
-    deleteButton.textContent = '×';
-    deleteButton.addEventListener('click', () => {
-      selectedImages.splice(index, 1);
-      sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
-    });
-
-    const sortableItem = document.createElement('div');
-    sortableItem.classList.add('sortable-item');
-    sortableItem.appendChild(imgElement);
-    sortableItem.appendChild(fileNameElement);
-    sortableItem.appendChild(deleteButton);
-
-    sortableImages.appendChild(sortableItem);
-  });
-
-  sortableImages.appendChild(addMoreImagesButton); // Asegurarse de que el botón esté al final
-
+  updateSortableImagesPreview(); // Actualizar la vista previa
   sortModal.style.display = 'block';
   new Sortable(sortableImages, {
     animation: 150,
