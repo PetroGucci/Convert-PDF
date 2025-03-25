@@ -413,7 +413,7 @@ generatePdfButton.addEventListener('click', async () => {
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
   const canvasResolution = 3; // Aumentar resolución del lienzo
-  let pdf = new jsPDF({
+  const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
     format: [pageWidth, pageHeight],
@@ -423,18 +423,24 @@ generatePdfButton.addEventListener('click', async () => {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width;
-    const height = img.height;
-    if (i === 0) {
-      pdf = new jsPDF({
-        orientation: width > height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [width, height],
-      });
-    } else {
-      pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = pageWidth * canvasResolution;
+    canvas.height = pageHeight * canvasResolution;
+    ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
+    const x = (pageWidth - img.width * scale) / 2;
+    const y = (pageHeight - img.height * scale) / 2;
+    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+    const finalImgData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad
+    if (i > 0) {
+      pdf.addPage();
     }
-    pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight);
   }
   pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   resetUnifiedPDFState(); // Reiniciar el estado
@@ -446,7 +452,7 @@ generatePdfBNButton.addEventListener('click', async () => {
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
   const canvasResolution = 3; // Aumentar resolución del lienzo
-  let pdf = new jsPDF({
+  const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
     format: [pageWidth, pageHeight],
@@ -456,25 +462,25 @@ generatePdfBNButton.addEventListener('click', async () => {
     const file = selectedImages[i];
     const imgData = await readImageAsDataURL(file);
     const img = await loadImage(imgData);
-    const width = img.width;
-    const height = img.height;
     const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     canvas.width = pageWidth * canvasResolution;
     canvas.height = pageHeight * canvasResolution;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, width, height);
-    applyScanFilterToCanvas(canvas, width, height);
-    const filteredImgData = canvas.toDataURL('image/jpeg', 1.0);
-    if (i === 0) {
-      pdf = new jsPDF({
-        orientation: width > height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [width, height],
-      });
-    } else {
-      pdf.addPage([width, height], width > height ? 'landscape' : 'portrait');
+    ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
+    const x = (pageWidth - img.width * scale) / 2;
+    const y = (pageHeight - img.height * scale) / 2;
+    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+    applyScanFilterToCanvas(canvas, canvas.width, canvas.height);
+    const finalImgData = canvas.toDataURL('image/jpeg', 1.0); // Alta calidad
+    if (i > 0) {
+      pdf.addPage();
     }
-    pdf.addImage(filteredImgData, 'JPEG', 0, 0, width, height);
+    pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight);
   }
   pdf.save(selectedImages[0].name.replace(/\.[^/.]+$/, ".pdf"));
   resetUnifiedPDFState(); // Reiniciar el estado
