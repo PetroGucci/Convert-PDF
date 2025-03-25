@@ -5,7 +5,7 @@ body {
   transition: 0.3s;
 }
 .section {
-  margin: 1rem auto;
+  margin: 2rem auto;
   padding: 15px;
   width: 100%;
   max-width: 30dvw;
@@ -200,7 +200,26 @@ canvas { display: none; }
 .dark-mode #cancelExtract:hover, .dark-mode #cancelPdf:hover, .dark-mode #cancelEditSection:hover, .dark-mode #cancelEdit:hover ,.dark-mode #cancelSort:hover{
   background-color: #F28C3C;
 }
-h1, h2 {
+h1 {
+  color: #660000; /* Similar al color del texto del footer */
+  transition: color 0.3s;
+  background-color: #fff0f0; /* Igual que el fondo del footer */
+  text-align: center; /* Centrado como el footer */
+  padding: 20px; /* Espaciado similar al footer */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra similar al footer */
+  margin: -20px; /* Elimina el margen superior */
+  top: 0; /* Asegura que esté en el borde superior */
+  left: 0; /* Alinea al borde izquierdo */
+  right: 0; /* Alinea al borde derecho */
+  z-index: 1000; /* Asegura que esté encima de otros elementos */
+}
+
+.dark-mode h1 {
+  color: #ccc; /* Similar al color del texto del footer en modo oscuro */
+  background-color: #3a0a0a; /* Igual que el fondo del footer en modo oscuro */
+}
+
+h2 {
   color: #660000; /* Azul oscuro en modo claro */
   transition: color 0.3s;
 }
@@ -374,4 +393,35 @@ h1, h2 {
 
 .dark-mode .delete-button:hover {
   background-color: #a02c3c;
+}
+
+/* Footer */
+footer {
+  font-family: Arial, sans-serif;
+  font-size: 0.9em;
+  color: #555;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff0f0; /* Asegura que no sea transparente */
+  margin-top: 50px; /* Agrega espacio antes del footer */
+}
+
+footer a {
+  color: #b3003a; /* Color del enlace */
+  text-decoration: none; /* Sin subrayado */
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  color: #800000; /* Color al pasar el cursor */
+}
+
+.dark-mode footer {
+  background-color: #3a0a0a;
+  color: #ccc;
 }
