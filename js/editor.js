@@ -303,17 +303,17 @@ function readImageAsDataURL(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
+    reader.onerror = error => reject(error);
     reader.readAsDataURL(file);
   });
 }
 
-function loadImage(dataURL) {
+function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = dataURL;
+    img.onerror = error => reject(error);
+    img.src = src;
   });
 }
 
@@ -613,25 +613,25 @@ sortImagesButton.addEventListener('click', () => {
 applySortButton.addEventListener('click', () => {
   const sortedImages = [];
   sortableImages.querySelectorAll('img').forEach(img => {
-    sortedImages.push(selectedImages[img.dataset.index]);
+    sortedImages.push(selectedImages[img.dataset.index]); // Reorganizar según el nuevo orden
   });
-  selectedImages = sortedImages;
-  sortModal.style.display = 'none';
+  selectedImages = sortedImages; // Actualizar el array con el nuevo orden
+  sortModal.style.display = 'none'; // Cerrar el modal
 });
 
 cancelSortButton.addEventListener('click', () => {
-  sortModal.style.display = 'none';
+  sortModal.style.display = 'none'; // Cerrar el modal sin guardar cambios
 });
 
 addMoreImagesButton.addEventListener('click', () => {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/png, image/jpeg';
-  input.multiple = true;
+  input.multiple = true; // Permitir múltiples imágenes
   input.click();
   input.addEventListener('change', () => {
     if (input.files.length > 0) {
-      processImages(Array.from(input.files));
+      processImages(Array.from(input.files)); // Procesar las nuevas imágenes
       sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
     }
   });
@@ -639,17 +639,17 @@ addMoreImagesButton.addEventListener('click', () => {
 
 addMoreImagesButton.addEventListener('dragover', (e) => {
   e.preventDefault();
-  addMoreImagesButton.classList.add('dragover');
+  addMoreImagesButton.classList.add('dragover'); // Agregar estilo visual
 });
 
 addMoreImagesButton.addEventListener('dragleave', () => {
-  addMoreImagesButton.classList.remove('dragover');
+  addMoreImagesButton.classList.remove('dragover'); // Quitar estilo visual
 });
 
 addMoreImagesButton.addEventListener('drop', (e) => {
   e.preventDefault();
-  addMoreImagesButton.classList.remove('dragover');
-  const files = getFilesFromDataTransfer(e);
-  processImages(files);
+  addMoreImagesButton.classList.remove('dragover'); // Quitar estilo visual
+  const files = getFilesFromDataTransfer(e); // Obtener los archivos arrastrados
+  processImages(files); // Procesar las nuevas imágenes
   sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
 });
