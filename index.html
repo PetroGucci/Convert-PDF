@@ -46,6 +46,16 @@
     <button id="cancelPdf" style="display: none;">Cancelar</button>
   </div>
 
+  <!-- Modal para ordenar imágenes -->
+  <div id="sortModal" class="modal">
+    <div id="sortContent" class="modal-content">
+      <h2 style="display: inline-block;">Ordenar Imágenes</h2>
+      <button id="applySort" style="float: right;">Aplicar Cambios</button>
+      <button id="cancelSort" style="float: left;">Regresar</button>
+      <div id="sortableImages" class="sortable-container"></div>
+    </div>
+  </div>
+  
   <!-- Nueva sección: Editar imágenes o documentos sin cambiar el formato -->
   <div class="section" id="editSection">
     <img id="editorImagelogo" class="imagen" src="./img/editor_light.png" alt="Editor">
@@ -72,14 +82,6 @@
     </div>
   </div>
 
-  <!-- Modal para ordenar imágenes -->
-  <div id="sortModal" class="modal">
-    <div id="sortContent" class="modal-content">
-      <h2 style="display: inline-block;">Ordenar Imágenes</h2>
-      <button id="applySort" style="float: right;">Aplicar Cambios</button>
-      <button id="cancelSort" style="float: left;">Regresar</button>
-      <div id="sortableImages" class="sortable-container"></div>
-    </div>
-  </div>
+
 </body>
 </html>
