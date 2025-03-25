@@ -386,9 +386,11 @@ async function updateSortableImagesPreview() {
 }
 
 function processImages(files) {
-  const newImages = Array.from(files).filter(file =>
-    file.type === 'image/png' || file.type === 'image/jpeg'
-  );
+  const newImages = Array.from(files).filter(file => {
+    return (file.type === 'image/png' || file.type === 'image/jpeg') &&
+           !selectedImages.some(existingFile =>
+             existingFile.name === file.name && existingFile.size === file.size);
+  });
   if (currentUnifiedType !== "images") {
     selectedImages = newImages;
     currentUnifiedType = "images";
@@ -632,7 +634,6 @@ addMoreImagesButton.addEventListener('click', () => {
   input.addEventListener('change', () => {
     if (input.files.length > 0) {
       processImages(Array.from(input.files)); // Procesar las nuevas imágenes
-      sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
     }
   });
 });
@@ -651,5 +652,4 @@ addMoreImagesButton.addEventListener('drop', (e) => {
   addMoreImagesButton.classList.remove('dragover'); // Quitar estilo visual
   const files = getFilesFromDataTransfer(e); // Obtener los archivos arrastrados
   processImages(files); // Procesar las nuevas imágenes
-  sortImagesButton.click(); // Reabrir el modal para actualizar la lista de imágenes
 });
