@@ -346,14 +346,14 @@ async function updateSortableImagesPreview() {
     ctx.scale(canvasResolution, canvasResolution); // Escalar para mayor resolución
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    
     const scale = Math.min(pageWidth / img.width, pageHeight / img.height);
     const x = (pageWidth - img.width * scale) / 2;
     const y = (pageHeight - img.height * scale) / 2;
     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-
+    
     const previewData = canvas.toDataURL('image/jpeg', 0.95); // Alta calidad
-
+    
     const imgElement = document.createElement('img');
     imgElement.src = previewData;
     imgElement.dataset.index = i;
@@ -361,11 +361,11 @@ async function updateSortableImagesPreview() {
       previewImage.src = imgElement.src;
       previewModal.style.display = 'flex';
     });
-
+    
     const fileNameElement = document.createElement('div');
     fileNameElement.classList.add('file-name');
     fileNameElement.textContent = file.name;
-
+    
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('delete-button');
     deleteButton.textContent = '×';
@@ -373,13 +373,13 @@ async function updateSortableImagesPreview() {
       selectedImages.splice(i, 1);
       updateSortableImagesPreview(); // Actualizar la vista previa
     });
-
+    
     const sortableItem = document.createElement('div');
     sortableItem.classList.add('sortable-item');
     sortableItem.appendChild(imgElement);
     sortableItem.appendChild(fileNameElement);
     sortableItem.appendChild(deleteButton);
-
+    
     sortableImages.appendChild(sortableItem);
   }
   sortableImages.appendChild(addMoreImagesButton); // Asegurarse de que el botón esté al final
@@ -388,8 +388,8 @@ async function updateSortableImagesPreview() {
 function processImages(files) {
   const newImages = Array.from(files).filter(file => {
     return (file.type === 'image/png' || file.type === 'image/jpeg') &&
-           !selectedImages.some(existingFile =>
-             existingFile.name === file.name && existingFile.size === file.size);
+          !selectedImages.some(existingFile =>
+            existingFile.name === file.name && existingFile.size === file.size);
   });
   if (currentUnifiedType !== "images") {
     selectedImages = newImages;
