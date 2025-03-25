@@ -499,7 +499,6 @@ const editPreviewContainer = document.getElementById('editPreviewContainer');
 const editPreview = document.getElementById('editPreview');
 const editPdfCanvas = document.getElementById('editPdfCanvas');
 const openEditorButton = document.getElementById('openEditor');
-const downloadEditedButton = document.getElementById('downloadEdited');
 const cancelEditSectionButton = document.getElementById('cancelEditSection');
 
 let editFileType = ""; // "image" o "pdf"
@@ -524,7 +523,6 @@ function handleEditFile(file) {
   editPreviewContainer.style.display = 'none';
   cancelEditSectionButton.style.display = 'inline-block';
   openEditorButton.style.display = 'inline-block';
-  downloadEditedButton.style.display = 'inline-block';
   // En edición, siempre se reemplaza la entrada (ya sea imagen o PDF)
   if (file.type.startsWith('image/')) {
     editFileType = "image";
@@ -561,23 +559,11 @@ function handleEditFile(file) {
   openEditorButton.addEventListener('click', () => {
     if (editOriginalData) { openEditor(editOriginalData); }
   });
-
-  downloadEditedButton.addEventListener('click', () => {
-    if (editFileType === "image") {
-      const { jsPDF } = window.jspdf;
-      // Abrir editor para aplicar recorte y filtro antes de descargar
-      openEditor(editOriginalData);
-      // La descarga se realizará al pulsar "Descargar con filtro escáner" en el modal
-    } else if (editFileType === "pdf") {
-      openEditor(editOriginalData);
-    }
-  });
-
+  
   cancelEditSectionButton.addEventListener('click', () => {
     editDropZone.textContent = 'Arrastra y suelta una imagen o PDF aquí o haz clic para seleccionarlo';
     editPreviewContainer.style.display = 'none';
     openEditorButton.style.display = 'none';
-    downloadEditedButton.style.display = 'none';
     cancelEditSectionButton.style.display = 'none';
     editOriginalData = "";
     editFileType = "";
@@ -658,4 +644,17 @@ addMoreImagesButton.addEventListener('drop', (e) => {
   addMoreImagesButton.classList.remove('dragover'); // Quitar estilo visual
   const files = getFilesFromDataTransfer(e); // Obtener los archivos arrastrados
   processImages(files); // Procesar las nuevas imágenes
+});
+
+//Funcion de botones aparecer despues de aplicarla edicion de la imagen
+function onEdicionAplicada() {
+  document.getElementById('downloadBn').style.display = 'inline-block';
+  document.getElementById('downloadFiltered').style.display = 'inline-block';
+}
+document.getElementById('downloadBn').addEventListener('click', function() {
+  // Lógica para descargar la imagen en blanco y negro
+});
+
+document.getElementById('downloadFiltered').addEventListener('click', function() {
+  // Lógica para descargar la imagen con el filtro aplicado
 });
