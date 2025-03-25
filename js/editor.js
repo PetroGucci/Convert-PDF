@@ -333,7 +333,7 @@ async function updateSortableImagesPreview() {
   sortableImages.innerHTML = '';
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
-  const canvasResolution = 3; // Aumentar resolución del lienzo
+  const canvasResolution = 2.5; // Aumentar resolución del lienzo
 
   for (let i = 0; i < selectedImages.length; i++) {
     const file = selectedImages[i];
@@ -412,7 +412,7 @@ generatePdfButton.addEventListener('click', async () => {
   const { jsPDF } = window.jspdf;
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
-  const canvasResolution = 3; // Aumentar resolución del lienzo
+  const canvasResolution = 2.5; // Aumentar resolución del lienzo
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
@@ -451,7 +451,7 @@ generatePdfBNButton.addEventListener('click', async () => {
   const { jsPDF } = window.jspdf;
   const pageWidth = 595; // Ancho de página A4 en puntos
   const pageHeight = 842; // Altura de página A4 en puntos
-  const canvasResolution = 3; // Aumentar resolución del lienzo
+  const canvasResolution = 2.5; // Aumentar resolución del lienzo
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
