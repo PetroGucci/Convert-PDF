@@ -14,11 +14,11 @@ function updateImages(isDark) {
   const editorImagelogo = document.getElementById('editorImagelogo');
 
   if (convertImageLogo) {
-    convertImageLogo.src = isDark ? './img/convert_dark.png' : './img/convert_light.png'; 
+    convertImageLogo.src = isDark ? './img/convert_dark.webp' : './img/convert_light.webp'; 
   }
 
   if (editorImagelogo) {
-    editorImagelogo.src = isDark ? './img/editor_dark.png' : './img/editor_light.png';
+    editorImagelogo.src = isDark ? './img/editor_dark.webp' : './img/editor_light.webp';
   }
 }
 
