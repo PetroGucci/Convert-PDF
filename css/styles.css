@@ -92,7 +92,7 @@ canvas { display: none; }
   position: absolute;
   top: 10px;
   right: 15px;
-  z-index: 999;
+  z-index: 1001;
   transition: 0.3s;
 }
 
@@ -205,8 +205,7 @@ h1 {
   transition: color 0.3s;
   background-color: #fff0f0; /* Igual que el fondo del footer */
   text-align: center; /* Centrado como el footer */
-  padding: 20px; /* Espaciado similar al footer */
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra similar al footer */
+  padding: 5px; /* Espaciado similar al footer */
   margin: -20px; /* Elimina el margen superior */
   top: 0; /* Asegura que esté en el borde superior */
   left: 0; /* Alinea al borde izquierdo */
@@ -403,25 +402,80 @@ footer {
   text-align: center;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;  /* Mejor que left: 0; right: 0; */
   padding: 10px;
   box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
-  background-color: #fff0f0; /* Asegura que no sea transparente */
-  margin-top: 50px; /* Agrega espacio antes del footer */
+  background-color: #fff0f0;
 }
 
 footer a {
-  color: #b3003a; /* Color del enlace */
-  text-decoration: none; /* Sin subrayado */
+  color: #b3003a;
+  text-decoration: none;
   transition: color 0.3s;
 }
 
 footer a:hover {
-  color: #800000; /* Color al pasar el cursor */
+  color: #800000;
 }
 
 .dark-mode footer {
   background-color: #3a0a0a;
   color: #ccc;
+}
+
+/* Evita el scroll horizontal global */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Evita cualquier desbordamiento inesperado */
+}
+
+/* Estilo para el header */
+header {
+  background-color: #fff0f0; /* Igual que el fondo del footer */
+  color: #660000; /* Igual que el texto del footer */
+  text-align: center; /* Centrar el contenido */
+  padding: 10px; /* Espaciado similar al footer */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra similar al footer */
+  position: relative; /* Para posicionar el botón correctamente */
+  display: flex; /* Usar flexbox para centrar */
+  justify-content: space-between; /* Espacio entre el título y el botón */
+  align-items: center; /* Centrar verticalmente */
+}
+
+header h1 {
+  margin: 0; /* Eliminar márgenes */
+  flex: 1; /* Ocupa el espacio disponible */
+  text-align: center; /* Centrar el texto del título */
+}
+
+header #toggleDarkMode {
+  margin-top: 5px; /* Ajustar el espacio superior */
+  padding: 10px 15px; /* Aumentar el tamaño del botón */
+  font-size: 16px; /* Incrementar el tamaño del texto */
+  background-color: #b3003a; /* Color del botón */
+  color: white; /* Color del texto del botón */
+  border: none; /* Sin bordes */
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer; /* Cursor de mano */
+  transition: 0.3s; /* Transición suave */
+  margin-right: 0px; /* Espaciado del botón respecto al borde derecho */
+}
+
+header #toggleDarkMode:hover {
+  background-color: #800000; /* Color al pasar el cursor */
+}
+
+/* Modo oscuro para el header */
+.dark-mode header {
+  background-color: #3a0a0a; /* Igual que el fondo del footer en modo oscuro */
+  color: #ccc; /* Igual que el texto del footer en modo oscuro */
+}
+
+.dark-mode header #toggleDarkMode {
+  background-color: #a02c3c; /* Color del botón en modo oscuro */
+}
+
+.dark-mode header #toggleDarkMode:hover {
+  background-color: #d53a5a; /* Color al pasar el cursor en modo oscuro */
 }
