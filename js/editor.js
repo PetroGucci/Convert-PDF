@@ -1,63 +1,4 @@
 /* ====================================================
-  Modal de edición (se usará para aplicar recorte y filtro)
-==================================================== */
-let cropper = null;
-let editedImageData = null; // Se almacenará la imagen editada
-
-function openEditor(dataURL) {
-  const editorModal = document.getElementById('editorModal');
-  const editorImage = document.getElementById('editorImage');
-  editorImage.src = dataURL;
-  if (cropper) { cropper.destroy(); }
-  cropper = new Cropper(editorImage, {
-    viewMode: 1,
-    movable: true,
-    zoomable: true,
-    scalable: true,
-    cropBoxResizable: true,
-  });
-  editorModal.style.display = 'block';
-}
-
-function closeEditor() {
-  const editorModal = document.getElementById('editorModal');
-  editorModal.style.display = 'none';
-  if (cropper) { cropper.destroy(); cropper = null; }
-}
-
-document.getElementById('cancelEdit').addEventListener('click', closeEditor);
-
-// Al pulsar "Descargar con filtro escáner" se toma el recorte, se aplica el filtro y se descarga
-document.getElementById('applyEdit').addEventListener('click', () => {
-  if (!cropper) return;
-  const croppedCanvas = cropper.getCroppedCanvas();
-  // Aplica el filtro de escáner al canvas recortado
-  applyScanFilterToCanvas(croppedCanvas, croppedCanvas.width, croppedCanvas.height);
-  const editedData = croppedCanvas.toDataURL('image/jpeg', 1.0); // Calidad máxima
-  // Descarga según el tipo de archivo editado
-  if (editFileType === "image") {
-    const link = document.createElement('a');
-    link.href = editedData;
-    link.download = editFileName;
-    link.click();
-  } else if (editFileType === "pdf") {
-    const { jsPDF } = window.jspdf;
-    const img = new Image();
-    img.onload = function() {
-      const pdf = new jsPDF({
-        orientation: img.width > img.height ? 'landscape' : 'portrait',
-        unit: 'px',
-        format: [img.width, img.height]
-      });
-      pdf.addImage(editedData, 'JPEG', 0, 0, img.width, img.height);
-      pdf.save(editFileName.replace(/\.pdf$/, '.pdf'));
-    };
-    img.src = editedData;
-  }
-  closeEditor();
-});
-
-/* ====================================================
   Event listeners en section1 (se mantienen para expandir el área de drop)
 ==================================================== */
 const section1 = document.getElementById('section1');
@@ -494,6 +435,27 @@ cancelPdfButton.addEventListener('click', () => {
   SECCIÓN: Editar imágenes o documentos sin conversión
   (Se deja intacta, ya que funciona correctamente)
 ==================================================== */
+/* ====================================================
+  Modal de edición (se usará para aplicar recorte y filtro)
+==================================================== */
+let cropper = null;
+let editedImageData = null; // Se almacenará la imagen editada
+
+function openEditor(dataURL) {
+  const editorModal = document.getElementById('editorModal');
+  const editorImage = document.getElementById('editorImage');
+  editorImage.src = dataURL;
+  if (cropper) { cropper.destroy(); }
+  cropper = new Cropper(editorImage, {
+    viewMode: 1,
+    movable: true,
+    zoomable: true,
+    scalable: true,
+    cropBoxResizable: true,
+  });
+  editorModal.style.display = 'block';
+}
+
 const editDropZone = document.getElementById('editDropZone');
 const editPreviewContainer = document.getElementById('editPreviewContainer');
 const editPreview = document.getElementById('editPreview');
@@ -569,6 +531,45 @@ function handleEditFile(file) {
     editFileType = "";
   });
 }
+
+// Al pulsar "Descargar con filtro escáner" se toma el recorte, se aplica el filtro y se descarga
+document.getElementById('applyEdit').addEventListener('click', () => {
+  if (!cropper) return;
+  const croppedCanvas = cropper.getCroppedCanvas();
+  // Aplica el filtro de escáner al canvas recortado
+  applyScanFilterToCanvas(croppedCanvas, croppedCanvas.width, croppedCanvas.height);
+  const editedData = croppedCanvas.toDataURL('image/jpeg', 1.0); // Calidad máxima
+  // Descarga según el tipo de archivo editado
+  if (editFileType === "image") {
+    const link = document.createElement('a');
+    link.href = editedData;
+    link.download = editFileName;
+    link.click();
+  } else if (editFileType === "pdf") {
+    const { jsPDF } = window.jspdf;
+    const img = new Image();
+    img.onload = function() {
+      const pdf = new jsPDF({
+        orientation: img.width > img.height ? 'landscape' : 'portrait',
+        unit: 'px',
+        format: [img.width, img.height]
+      });
+      pdf.addImage(editedData, 'JPEG', 0, 0, img.width, img.height);
+      pdf.save(editFileName.replace(/\.pdf$/, '.pdf'));
+    };
+    img.src = editedData;
+  }
+  closeEditor();
+});
+
+//Funcion de cerrar el editor
+function closeEditor() {
+  const editorModal = document.getElementById('editorModal');
+  editorModal.style.display = 'none';
+  if (cropper) { cropper.destroy(); cropper = null; }
+}
+
+document.getElementById('cancelEdit').addEventListener('click', closeEditor);
 
 /* ====================================================
   SECCIÓN: Ordenar imágenes
