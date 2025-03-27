@@ -160,72 +160,7 @@ cancelExtractButton.addEventListener('click', () => {
   currentUnifiedType = "";
 });
 
-/* ====================================================
-  Funciones auxiliares para aplicar filtro escáner y cargar imágenes
-==================================================== */
-function applyScanFilterToCanvas(canvas, width, height) {
-  const ctx = canvas.getContext('2d');
-  const imageData = ctx.getImageData(0, 0, width, height);
-  const data = imageData.data;
-  const contrast = 2.6;
-  const brightness = 10;
-  for (let i = 0; i < data.length; i += 4) {
-    let gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
-    gray = contrast * (gray - 128) + 128 + brightness;
-    gray = Math.max(0, Math.min(255, gray));
-    data[i] = data[i + 1] = data[i + 2] = gray;
-  }
-  ctx.putImageData(imageData, 0, 0);
-}
 
-function convertDataURLWithScanFilter(dataURL) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      const contrast = 2.6;
-      const brightness = 10;
-      for (let i = 0; i < data.length; i += 4) {
-        let gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
-        gray = contrast * (gray - 128) + 128 + brightness;
-        gray = Math.max(0, Math.min(255, gray));
-        data[i] = data[i + 1] = data[i + 2] = gray;
-      }
-      ctx.putImageData(imageData, 0, 0);
-      resolve(canvas.toDataURL('image/jpeg', 1.0));
-    };
-    img.onerror = reject;
-    img.src = dataURL;
-  });
-}
-
-function readImageAsDataURL(fileOrDataURL) {
-  return new Promise((resolve, reject) => {
-    if (typeof fileOrDataURL === 'string') {
-      resolve(fileOrDataURL);
-    } else {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-      reader.readAsDataURL(fileOrDataURL);
-    }
-  });
-}
-
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = error => reject(error);
-    img.src = src;
-  });
-}
 
 /* ====================================================
   Sección: Convertir imágenes a PDF (y generar PDF unificado)
@@ -363,6 +298,72 @@ cancelPdfButton.addEventListener('click', () => {
 /* ====================================================
   SECCIÓN: Editar imágenes o documentos sin conversión
 ==================================================== */
+/* ====================================================
+  Funciones auxiliares para aplicar filtro escáner y cargar imágenes
+==================================================== */
+function applyScanFilterToCanvas(canvas, width, height) {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, width, height);
+  const data = imageData.data;
+  const contrast = 2.6;
+  const brightness = 10;
+  for (let i = 0; i < data.length; i += 4) {
+    let gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
+    gray = contrast * (gray - 128) + 128 + brightness;
+    gray = Math.max(0, Math.min(255, gray));
+    data[i] = data[i + 1] = data[i + 2] = gray;
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function convertDataURLWithScanFilter(dataURL) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const contrast = 2.6;
+      const brightness = 10;
+      for (let i = 0; i < data.length; i += 4) {
+        let gray = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
+        gray = contrast * (gray - 128) + 128 + brightness;
+        gray = Math.max(0, Math.min(255, gray));
+        data[i] = data[i + 1] = data[i + 2] = gray;
+      }
+      ctx.putImageData(imageData, 0, 0);
+      resolve(canvas.toDataURL('image/jpeg', 1.0));
+    };
+    img.onerror = reject;
+    img.src = dataURL;
+  });
+}
+
+function readImageAsDataURL(fileOrDataURL) {
+  return new Promise((resolve, reject) => {
+    if (typeof fileOrDataURL === 'string') {
+      resolve(fileOrDataURL);
+    } else {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(fileOrDataURL);
+    }
+  });
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = error => reject(error);
+    img.src = src;
+  });
+}
 const editDropZone = document.getElementById('editDropZone');
 const editPreviewContainer = document.getElementById('editPreviewContainer');
 const editPreview = document.getElementById('editPreview');
