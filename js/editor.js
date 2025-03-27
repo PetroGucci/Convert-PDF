@@ -1,5 +1,5 @@
 /* ====================================================
-  Event listeners en section1 (se mantienen para expandir el área de drop)
+  Event listeners en section1 (para expandir el área de drop)
 ==================================================== */
 const section1 = document.getElementById('section1');
 section1.addEventListener('dragover', (e) => { 
@@ -363,27 +363,6 @@ cancelPdfButton.addEventListener('click', () => {
 /* ====================================================
   SECCIÓN: Editar imágenes o documentos sin conversión
 ==================================================== */
-/* ====================================================
-  Modal de edición (se usará para aplicar recorte y filtro)
-==================================================== */
-let cropper = null;
-let editedImageData = null; // Se almacenará la imagen editada
-
-function openEditor(dataURL) {
-  const editorModal = document.getElementById('editorModal');
-  const editorImage = document.getElementById('editorImage');
-  editorImage.src = dataURL;
-  if (cropper) { cropper.destroy(); }
-  cropper = new Cropper(editorImage, {
-    viewMode: 1,
-    movable: true,
-    zoomable: true,
-    scalable: true,
-    cropBoxResizable: true,
-  });
-  editorModal.style.display = 'block';
-}
-
 const editDropZone = document.getElementById('editDropZone');
 const editPreviewContainer = document.getElementById('editPreviewContainer');
 const editPreview = document.getElementById('editPreview');
@@ -459,14 +438,40 @@ function handleEditFile(file) {
   });
 }
 
-// Al pulsar "Descargar con filtro escáner" se toma el recorte, se aplica el filtro y se descarga
+/* ====================================================
+  Modal de edición (se usará para aplicar recorte y filtro)
+==================================================== */
+let cropper = null;
+let editedImageData = null; // Se almacenará la imagen editada
+
+function openEditor(dataURL) {
+  const editorModal = document.getElementById('editorModal');
+  const editorImage = document.getElementById('editorImage');
+  editorImage.src = dataURL;
+  if (cropper) { cropper.destroy(); }
+  cropper = new Cropper(editorImage, {
+    viewMode: 1,
+    movable: true,
+    zoomable: true,
+    scalable: true,
+    cropBoxResizable: true,
+  });
+  editorModal.style.display = 'block';
+}
+
+function closeEditor() {
+  const editorModal = document.getElementById('editorModal');
+  editorModal.style.display = 'none';
+  if (cropper) { cropper.destroy(); cropper = null; }
+}
+
+document.getElementById('cancelEdit').addEventListener('click', closeEditor);
+
 document.getElementById('applyEdit').addEventListener('click', () => {
   if (!cropper) return;
   const croppedCanvas = cropper.getCroppedCanvas();
-  // Aplica el filtro de escáner al canvas recortado
   applyScanFilterToCanvas(croppedCanvas, croppedCanvas.width, croppedCanvas.height);
-  const editedData = croppedCanvas.toDataURL('image/jpeg', 1.0); // Calidad máxima
-  // Descarga según el tipo de archivo editado
+  const editedData = croppedCanvas.toDataURL('image/jpeg', 1.0);
   if (editFileType === "image") {
     const link = document.createElement('a');
     link.href = editedData;
@@ -488,15 +493,6 @@ document.getElementById('applyEdit').addEventListener('click', () => {
   }
   closeEditor();
 });
-
-//Funcion de cerrar el editor
-function closeEditor() {
-  const editorModal = document.getElementById('editorModal');
-  editorModal.style.display = 'none';
-  if (cropper) { cropper.destroy(); cropper = null; }
-}
-
-document.getElementById('cancelEdit').addEventListener('click', closeEditor);
 
 /* ====================================================
   SECCIÓN: Ordenar imágenes
