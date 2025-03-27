@@ -250,12 +250,7 @@ async function generateUnifiedPdf(applyFilter = false) {
   const pageWidth = 595;
   const pageHeight = 842;
   const canvasResolution = 2.5;
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'pt',
-    format: [pageWidth, pageHeight],
-  });
-  
+
   for (let i = 0; i < selectedImages.length; i++) {
     const imgData = await readImageAsDataURL(selectedImages[i]);
     const img = await loadImage(imgData);
@@ -273,13 +268,19 @@ async function generateUnifiedPdf(applyFilter = false) {
     if (applyFilter) {
       applyScanFilterToCanvas(canvas, canvas.width, canvas.height);
     }
-    const finalImgData = canvas.toDataURL('image/jpeg', 0.95);
-    if (i > 0) {
-      pdf.addPage();
-    }
-    pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'SLOW'); // Usar 'FAST' o 'SLOW'
+    const finalImgData = canvas.toDataURL('image/jpeg', 1.0);
+
+    // Crear un PDF por cada imagen con su nombre original
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: [pageWidth, pageHeight],
+    });
+    pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'SLOW');
+    const originalFileName = selectedImages[i].name || `imagen_${i + 1}`; // Usar el nombre original o un nombre genérico
+    pdf.save(`${originalFileName.replace(/\.[^/.]+$/, '')}.pdf`); // Guardar con el nombre original
   }
-  pdf.save("documento_modificado.pdf");
+
   resetUnifiedPDFState();
 }
 
