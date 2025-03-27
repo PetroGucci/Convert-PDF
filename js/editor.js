@@ -223,8 +223,11 @@ async function updateSortableImagesPreview() {
 function processImages(files) {
   const newImages = Array.from(files).filter(file => {
     return (file.type === 'image/png' || file.type === 'image/jpeg');
-  });
-  
+  }).map(file => ({
+    name: file.name, // Guardar el nombre original del archivo
+    data: file,
+  }));
+
   // Si ya hay imágenes o PDF cargados, agregamos sin reiniciar el estado.
   if (currentUnifiedType === "pdf" || currentUnifiedType === "images") {
     selectedImages = selectedImages.concat(newImages);
@@ -232,7 +235,7 @@ function processImages(files) {
     selectedImages = newImages;
     currentUnifiedType = "images";
   }
-  
+
   if (selectedImages.length > 0) {
     dropZone.textContent = `${selectedImages.length} imágenes/páginas cargadas`;
     generatePdfButton.style.display = 'inline-block';
@@ -344,17 +347,19 @@ function convertDataURLWithScanFilter(dataURL) {
   });
 }
 
-function readImageAsDataURL(fileOrDataURL) {
-  return new Promise((resolve, reject) => {
-    if (typeof fileOrDataURL === 'string') {
-      resolve(fileOrDataURL);
-    } else {
-      const reader = new FileReader();
+async function readImageAsDataURL(fileOrDataURL) {
+  if (typeof fileOrDataURL === 'string') {
+    return fileOrDataURL;
+  } else if (fileOrDataURL.data) {
+    // Si el objeto contiene datos, procesar el archivo
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
       reader.onload = () => resolve(reader.result);
       reader.onerror = error => reject(error);
-      reader.readAsDataURL(fileOrDataURL);
-    }
-  });
+      reader.readAsDataURL(fileOrDataURL.data);
+    });
+  }
+  return null;
 }
 
 function loadImage(src) {
