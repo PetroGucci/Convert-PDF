@@ -495,6 +495,17 @@ document.getElementById('applyEdit').addEventListener('click', () => {
   closeEditor();
 });
 
+//Evento para aplicar edición sin filtro
+document.getElementById('downloadWithoutFilter').addEventListener('click', () => {
+  if (!cropper) return;
+  const croppedCanvas = cropper.getCroppedCanvas();
+  const originalData = croppedCanvas.toDataURL('image/jpeg', 1.0);
+  const link = document.createElement('a');
+  link.href = originalData;
+  link.download = editFileName.replace(/\.[^/.]+$/, '_sin_filtro.jpg');
+  link.click();
+});
+
 /* ====================================================
   SECCIÓN: Ordenar imágenes
 ==================================================== */
@@ -575,6 +586,7 @@ addMoreImagesButton.addEventListener('drop', (e) => {
 function onEdicionAplicada() {
   document.getElementById('downloadBn').style.display = 'inline-block';
   document.getElementById('downloadFiltered').style.display = 'inline-block';
+  document.getElementById('downloadWithoutFilter').style.display = 'inline-block'; // Mostrar botón
 }
 document.getElementById('downloadBn').addEventListener('click', function() {
   // Lógica para descargar la imagen en blanco y negro
