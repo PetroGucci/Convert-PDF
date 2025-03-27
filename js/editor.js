@@ -277,7 +277,7 @@ async function generateUnifiedPdf(applyFilter = false) {
     if (i > 0) {
       pdf.addPage();
     }
-    pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+    pdf.addImage(finalImgData, 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'SLOW'); // Usar 'FAST' o 'SLOW'
   }
   pdf.save("documento_modificado.pdf");
   resetUnifiedPDFState();
@@ -472,7 +472,8 @@ document.getElementById('applyEdit').addEventListener('click', () => {
   if (!cropper) return;
   const croppedCanvas = cropper.getCroppedCanvas();
   applyScanFilterToCanvas(croppedCanvas, croppedCanvas.width, croppedCanvas.height);
-  const editedData = croppedCanvas.toDataURL('image/jpeg', 1.0);
+  const editedData = croppedCanvas.toDataURL('image/jpeg', 0.95); // Ajustar calidad (0.8 es alta calidad)
+  
   if (editFileType === "image") {
     const link = document.createElement('a');
     link.href = editedData;
@@ -487,8 +488,8 @@ document.getElementById('applyEdit').addEventListener('click', () => {
         unit: 'px',
         format: [img.width, img.height]
       });
-      pdf.addImage(editedData, 'JPEG', 0, 0, img.width, img.height);
-      pdf.save(editFileName.replace(/\.pdf$/, '.pdf'));
+      pdf.addImage(editedData, 'JPEG', 0, 0, img.width, img.height, undefined, 'SLOW'); // Ajustar calidad aquí
+      pdf.save(editFileName.replace(/\.[^/.]+$/, '.pdf'));
     };
     img.src = editedData;
   }
@@ -499,11 +500,25 @@ document.getElementById('applyEdit').addEventListener('click', () => {
 document.getElementById('downloadWithoutFilter').addEventListener('click', () => {
   if (!cropper) return;
   const croppedCanvas = cropper.getCroppedCanvas();
-  const originalData = croppedCanvas.toDataURL('image/jpeg', 1.0);
+  const originalData = croppedCanvas.toDataURL('image/jpeg', 0.95);
   const link = document.createElement('a');
   link.href = originalData;
-  link.download = editFileName.replace(/\.[^/.]+$/, '_sin_filtro.jpg');
+  link.download = editFileName.replace(/\.[^/.]+$/, '.jpg');
   link.click();
+  closeEditor(); // Cierra el editor modal después de descargar
+});
+
+//Eventos para rotar la imagen
+document.getElementById('rotateLeft').addEventListener('click', () => {
+  if (cropper) {
+    cropper.rotate(-90); // Girar 90° hacia la izquierda
+  }
+});
+
+document.getElementById('rotateRight').addEventListener('click', () => {
+  if (cropper) {
+    cropper.rotate(90); // Girar 90° hacia la derecha
+  }
 });
 
 /* ====================================================
@@ -586,7 +601,9 @@ addMoreImagesButton.addEventListener('drop', (e) => {
 function onEdicionAplicada() {
   document.getElementById('downloadBn').style.display = 'inline-block';
   document.getElementById('downloadFiltered').style.display = 'inline-block';
-  document.getElementById('downloadWithoutFilter').style.display = 'inline-block'; // Mostrar botón
+  document.getElementById('downloadWithoutFilter').style.display = 'inline-block';
+  document.getElementById('rotateLeft').style.display = 'inline-block'; // Mostrar botón de girar izquierda
+  document.getElementById('rotateRight').style.display = 'inline-block'; // Mostrar botón de girar derecha
 }
 document.getElementById('downloadBn').addEventListener('click', function() {
   // Lógica para descargar la imagen en blanco y negro
